@@ -1,0 +1,30 @@
+## Defaults
+syntax: glob
+## Special files
+*~
+[_]*
+
+## Compiled Go source
+[568vq].out
+*.[568vq]
+*.[ao]
+*.exe
+
+## Compiled Cgo source
+*.cgo*
+*.dll
+*.so
+
+## Data
+*.bin
+
+## Logs and databases
+*.db
+*.log
+*.sql
+*.sqlite
+
+## OS generated files
+Icon?
+
+# * * *
