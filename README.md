@@ -1,7 +1,7 @@
 slug
 ====
 
-Package `slug` generate slug from unicode string. URL-friendly slugify with
+Package `slug` generate slug from unicode string, URL-friendly slugify with
 multiple languages support.
 
 [Documentation online](http://godoc.org/bitbucket.org/gosimple/slug)

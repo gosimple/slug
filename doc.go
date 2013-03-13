@@ -4,7 +4,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 /*
-Package slug generate slug from unicode string. URL-friendly slugify with
+Package slug generate slug from unicode string, URL-friendly slugify with
 multiple languages support.
 
 Example:
