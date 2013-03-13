@@ -13,7 +13,7 @@ Example:
 
 	import(
 		"bitbucket.org/gosimple/slug"
-	    "fmt"
+		"fmt"
 	)
 
 	text := slug.Make("Hellö Wörld хелло ворлд")
