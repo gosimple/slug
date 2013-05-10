@@ -11,6 +11,11 @@ import (
 	"strings"
 )
 
+var (
+	// Custom substitution map
+	CustomSub map[rune]string
+)
+
 //=============================================================================
 
 // Make returns slug generated from provided string. Will use "en" as language
@@ -37,6 +42,7 @@ func MakeLang(s string, lang string) (slug string) {
 	}
 
 	slug = substitute(slug, defaultSub)
+	slug = substitute(slug, CustomSub)
 
 	slug = unidecode.Unidecode(slug)
 
