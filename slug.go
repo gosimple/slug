@@ -20,8 +20,8 @@ var (
 	// Maximum slug length. It's smart so it will cat slug after full word.
 	// By default slugs aren't shortened.
 	// If MaxLength is smaller than length of the first word, then returned
-	// slug will contain substring from the first word truncated after
-	// MaxLength.
+	// slug will contain only substring from the first word truncated
+	// after MaxLength.
 	MaxLength int
 )
 
