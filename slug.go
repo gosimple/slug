@@ -16,6 +16,13 @@ var (
 	CustomSub map[string]string
 	// Custom rune substitution map
 	CustomRuneSub map[rune]string
+
+	// Maximum slug length. It's smart so it will cat slug after full word.
+	// By default slugs aren't shortened.
+	// If MaxLength is smaller than length of the first word, then returned
+	// slug will contain substring from the first word truncated after
+	// MaxLength.
+	MaxLength int
 )
 
 //=============================================================================
@@ -56,6 +63,11 @@ func MakeLang(s string, lang string) (slug string) {
 	slug = regexp.MustCompile("[^a-z0-9-_]").ReplaceAllString(slug, "-")
 	slug = regexp.MustCompile("-+").ReplaceAllString(slug, "-")
 	slug = strings.Trim(slug, "-")
+
+	if MaxLength > 0 {
+		slug = smartTruncate(slug)
+	}
+
 	return slug
 }
 
@@ -80,4 +92,26 @@ func SubstituteRune(s string, sub map[rune]string) (buf string) {
 		}
 	}
 	return
+}
+
+func smartTruncate(text string) string {
+	if len(text) < MaxLength {
+		return text
+	}
+
+	var truncated string
+	words := strings.SplitAfter(text, "-")
+	// If MaxLength is smaller than length of the first word return word
+	// truncated after MaxLength.
+	if len(words[0]) > MaxLength {
+		return words[0][:MaxLength]
+	}
+	for _, word := range words {
+		if len(truncated)+len(word)-1 <= MaxLength {
+			truncated = truncated + word
+		} else {
+			break
+		}
+	}
+	return strings.Trim(truncated, "-")
 }
