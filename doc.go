@@ -28,6 +28,12 @@ Example:
 
 		deText := slug.MakeLang("Diese & Dass", "de")
 		fmt.Println(deText) // Will print 'diese-und-dass'
+
+		slug.CustomSub = map[string]string{
+			"water": "sand",
+		}
+		textSub := slug.Make("water is hot")
+		fmt.Println(textSub) // Will print 'sand-is-hot'
 	}
 
 Requests or bugs?
