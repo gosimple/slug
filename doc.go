@@ -16,17 +16,19 @@ Example:
 		"fmt"
 	)
 
-	text := slug.Make("Hellö Wörld хелло ворлд")
-	fmt.Println(text) // Will print hello-world-khello-vorld
+	func main () {
+		text := slug.Make("Hellö Wörld хелло ворлд")
+		fmt.Println(text) // Will print hello-world-khello-vorld
 
-	someText := slug.Make("影師")
-	fmt.Println(someText) // Will print: ying-shi
+		someText := slug.Make("影師")
+		fmt.Println(someText) // Will print: ying-shi
 
-	enText := slug.MakeLang("This & that", "en")
-	fmt.Println(enText) // Will print 'this-and-that'
+		enText := slug.MakeLang("This & that", "en")
+		fmt.Println(enText) // Will print 'this-and-that'
 
-	deText := slug.MakeLang("Diese & Dass", "de")
-	fmt.Println(deText) // Will print 'diese-und-dass'
+		deText := slug.MakeLang("Diese & Dass", "de")
+		fmt.Println(deText) // Will print 'diese-und-dass'
+	}
 
 Requests or bugs?
 
