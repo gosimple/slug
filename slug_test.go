@@ -78,3 +78,41 @@ func TestSlugMakeLang(t *testing.T) {
 		}
 	}
 }
+
+var SlugSubstituteTests = []struct {
+	cSub map[string]string
+	in   string
+	out  string
+}{
+	{map[string]string{"water": "sand"}, "water is hot", "sand is hot"},
+}
+
+func TestSubstituteLang(t *testing.T) {
+	for index, sst := range SlugSubstituteTests {
+		text := Substitute(sst.in, sst.cSub)
+		if sst.out != text {
+			t.Errorf(
+				"%d. Substitute(%v, %v) => out = %v, want %v",
+				index, sst.in, sst.cSub, text, sst.out)
+		}
+	}
+}
+
+var SlugSubstituteRuneTests = []struct {
+	cSub map[rune]string
+	in   string
+	out  string
+}{
+	{map[rune]string{'o': "no"}, "o o o", "no no no"},
+}
+
+func TestSubstituteRuneLang(t *testing.T) {
+	for index, ssrt := range SlugSubstituteRuneTests {
+		text := SubstituteRune(ssrt.in, ssrt.cSub)
+		if ssrt.out != text {
+			t.Errorf(
+				"%d. SubstituteRune(%v, %v) => out = %v, want %v",
+				index, ssrt.in, ssrt.cSub, text, ssrt.out)
+		}
+	}
+}
