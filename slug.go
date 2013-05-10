@@ -32,17 +32,17 @@ func MakeLang(s string, lang string) (slug string) {
 	// Select substitution language
 	switch lang {
 	case "de":
-		slug = substitute(slug, deSub)
+		slug = Substitute(slug, deSub)
 	case "en":
-		slug = substitute(slug, enSub)
+		slug = Substitute(slug, enSub)
 	case "pl":
-		slug = substitute(slug, plSub)
+		slug = Substitute(slug, plSub)
 	default: // fallback to "en" if lang not found
-		slug = substitute(slug, enSub)
+		slug = Substitute(slug, enSub)
 	}
 
-	slug = substitute(slug, defaultSub)
-	slug = substitute(slug, CustomSub)
+	slug = Substitute(slug, defaultSub)
+	slug = Substitute(slug, CustomSub)
 
 	slug = unidecode.Unidecode(slug)
 
@@ -55,7 +55,7 @@ func MakeLang(s string, lang string) (slug string) {
 }
 
 // Substitute string chars with provided substitution map.
-func substitute(s string, sub map[rune]string) (buf string) {
+func Substitute(s string, sub map[rune]string) (buf string) {
 	for _, c := range s {
 		if d, ok := sub[c]; ok {
 			buf += d
