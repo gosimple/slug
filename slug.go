@@ -13,7 +13,9 @@ import (
 
 var (
 	// Custom substitution map
-	CustomSub map[rune]string
+	CustomSub map[string]string
+	// Custom rune substitution map
+	CustomRuneSub map[rune]string
 )
 
 //=============================================================================
@@ -32,16 +34,19 @@ func MakeLang(s string, lang string) (slug string) {
 	// Select substitution language
 	switch lang {
 	case "de":
-		slug = Substitute(slug, deSub)
+		slug = SubstituteRune(slug, deSub)
 	case "en":
-		slug = Substitute(slug, enSub)
+		slug = SubstituteRune(slug, enSub)
 	case "pl":
-		slug = Substitute(slug, plSub)
+		slug = SubstituteRune(slug, plSub)
 	default: // fallback to "en" if lang not found
-		slug = Substitute(slug, enSub)
+		slug = SubstituteRune(slug, enSub)
 	}
 
-	slug = Substitute(slug, defaultSub)
+	slug = SubstituteRune(slug, defaultSub)
+
+	// Custom substitutions
+	slug = SubstituteRune(slug, CustomRuneSub)
 	slug = Substitute(slug, CustomSub)
 
 	slug = unidecode.Unidecode(slug)
@@ -54,8 +59,19 @@ func MakeLang(s string, lang string) (slug string) {
 	return slug
 }
 
-// Substitute string chars with provided substitution map.
-func Substitute(s string, sub map[rune]string) (buf string) {
+// Substitute returns string with superseded all substrings from
+// provided substitution map.
+func Substitute(s string, sub map[string]string) (buf string) {
+	buf = s
+	for key, val := range sub {
+		buf = strings.Replace(s, key, val, -1)
+	}
+	return
+}
+
+// SubstituteRune substitutes string chars with provided rune
+// substitution map.
+func SubstituteRune(s string, sub map[rune]string) (buf string) {
 	for _, c := range s {
 		if d, ok := sub[c]; ok {
 			buf += d
