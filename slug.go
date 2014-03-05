@@ -38,7 +38,12 @@ func Make(s string) (slug string) {
 func MakeLang(s string, lang string) (slug string) {
 	slug = strings.TrimSpace(s)
 
-	// Select substitution language
+	// Custom substitutions
+	// Always substitute runes first
+	slug = SubstituteRune(slug, CustomRuneSub)
+	slug = Substitute(slug, CustomSub)
+
+	// Process string with selected substitution language
 	switch lang {
 	case "de":
 		slug = SubstituteRune(slug, deSub)
@@ -52,14 +57,12 @@ func MakeLang(s string, lang string) (slug string) {
 
 	slug = SubstituteRune(slug, defaultSub)
 
-	// Custom substitutions
-	slug = SubstituteRune(slug, CustomRuneSub)
-	slug = Substitute(slug, CustomSub)
-
+	// Process all non ASCII symbols
 	slug = unidecode.Unidecode(slug)
 
 	slug = strings.ToLower(slug)
 
+	// Process all remaining symbols
 	slug = regexp.MustCompile("[^a-z0-9-_]").ReplaceAllString(slug, "-")
 	slug = regexp.MustCompile("-+").ReplaceAllString(slug, "-")
 	slug = strings.Trim(slug, "-")
