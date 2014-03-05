@@ -4,7 +4,8 @@ slug
 Package `slug` generate slug from unicode string, URL-friendly slugify with
 multiple languages support.
 
-[Documentation online](http://godoc.org/bitbucket.org/gosimple/slug)
+[![Build Status](https://drone.io/bitbucket.org/gosimple/slug/status.png)](https://drone.io/bitbucket.org/gosimple/slug/latest)
+[![GoDoc](https://godoc.org/bitbucket.org/gosimple/slug?status.png)](https://godoc.org/bitbucket.org/gosimple/slug)
 
 ## Example
 
