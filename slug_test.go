@@ -66,6 +66,7 @@ var SlugMakeLangTests = []struct {
 }{
 	{"en", "This & that", "this-and-that"},
 	{"de", "This & that", "this-und-that"},
+	{"pl", "This & that", "this-i-that"},
 	{"test", "This & that", "this-and-that"}, // unknown lang, fallback to "en"
 }
 
@@ -167,6 +168,31 @@ func TestSubstituteRuneLang(t *testing.T) {
 			t.Errorf(
 				"%d. SubstituteRune(%q, %q) => out = %q, want %q",
 				index, ssrt.in, ssrt.cSub, text, ssrt.out)
+		}
+	}
+}
+
+var SlugMakeSmartTruncateTests = []struct {
+	in        string
+	maxLength int
+	out       string
+}{
+	{"DOBROSLAWZYBORT", 100, "dobroslawzybort"},
+	{"Dobroslaw Zybort", 100, "dobroslaw-zybort"},
+	{"Dobroslaw Zybort", 12, "dobroslaw"},
+	{"  Dobroslaw     Zybort  ?", 12, "dobroslaw"},
+	{"Ala ma 6 kotów.", 10, "ala-ma-6"},
+	{"Dobrosław Żybort", 5, "dobro"},
+}
+
+func TestSlugMakeSmartTruncate(t *testing.T) {
+	for index, smstt := range SlugMakeSmartTruncateTests {
+		MaxLength = smstt.maxLength
+		slug := Make(smstt.in)
+		if smstt.out != slug {
+			t.Errorf(
+				"%d. MaxLength = %v; Make(%q) => out = %q, want %q",
+				index, smstt.maxLength, smstt.in, slug, smstt.out)
 		}
 	}
 }
