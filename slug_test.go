@@ -53,7 +53,7 @@ func TestSlugMake(t *testing.T) {
 		slug := Make(st.in)
 		if st.out != slug {
 			t.Errorf(
-				"%d. Make(%v) => out = %v, want %v",
+				"%d. Make(%q) => out = %q, want %q",
 				index, st.in, slug, st.out)
 		}
 	}
@@ -66,6 +66,7 @@ var SlugMakeLangTests = []struct {
 }{
 	{"en", "This & that", "this-and-that"},
 	{"de", "This & that", "this-und-that"},
+	{"test", "This & that", "this-and-that"}, // unknown lang, fallback to "en"
 }
 
 func TestSlugMakeLang(t *testing.T) {
@@ -73,8 +74,59 @@ func TestSlugMakeLang(t *testing.T) {
 		slug := MakeLang(smlt.in, smlt.lang)
 		if smlt.out != slug {
 			t.Errorf(
-				"%d. MakeLang(%v, \"%v\") => out = %v, want %v",
+				"%d. MakeLang(%q, %q) => out = %q, want %q",
 				index, smlt.in, smlt.lang, slug, smlt.out)
+		}
+	}
+}
+
+var SlugMakeUserSubstituteTests = []struct {
+	cSub map[string]string
+	lang string
+	in   string
+	out  string
+}{
+	{map[string]string{"'": " "}, "en", "That's great", "that-s-great"},
+	{map[string]string{"&": "or"}, "en", "This & that", "this-or-that"}, // by default "&" => "and"
+	{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"}, // by default "&" => "und"
+}
+
+func TestSlugMakeUserSubstituteLang(t *testing.T) {
+	for index, smust := range SlugMakeUserSubstituteTests {
+		CustomSub = smust.cSub
+		slug := MakeLang(smust.in, smust.lang)
+		if smust.out != slug {
+			t.Errorf(
+				"%d. %q; MakeLang(%q, %q) => out = %q, want %q",
+				index, smust.cSub, smust.in, smust.lang,
+				slug, smust.out)
+
+		}
+	}
+}
+
+// Always substitute runes first
+var SlugMakeSubstituteOrderTests = []struct {
+	rSub map[rune]string
+	sSub map[string]string
+	in   string
+	out  string
+}{
+	{map[rune]string{'o': "left"}, map[string]string{"o": "right"}, "o o", "left-left"},
+	{map[rune]string{'&': "down"}, map[string]string{"&": "up"}, "&", "down"},
+}
+
+func TestSlugMakeSubstituteOrderLang(t *testing.T) {
+	for index, smsot := range SlugMakeSubstituteOrderTests {
+		CustomRuneSub = smsot.rSub
+		CustomSub = smsot.sSub
+		slug := Make(smsot.in)
+		if smsot.out != slug {
+			t.Errorf(
+				"%d. %q; %q; Make(%q) => out = %q, want %q",
+				index, smsot.rSub, smsot.sSub, smsot.in,
+				slug, smsot.out)
+
 		}
 	}
 }
@@ -84,7 +136,8 @@ var SlugSubstituteTests = []struct {
 	in   string
 	out  string
 }{
-	{map[string]string{"water": "sand"}, "water is hot", "sand is hot"},
+	{map[string]string{"o": "no"}, "o o o", "no no no"},
+	{map[string]string{"'": " "}, "That's great", "That s great"},
 }
 
 func TestSubstituteLang(t *testing.T) {
@@ -92,7 +145,7 @@ func TestSubstituteLang(t *testing.T) {
 		text := Substitute(sst.in, sst.cSub)
 		if sst.out != text {
 			t.Errorf(
-				"%d. Substitute(%v, %v) => out = %v, want %v",
+				"%d. Substitute(%q, %q) => out = %q, want %q",
 				index, sst.in, sst.cSub, text, sst.out)
 		}
 	}
@@ -104,6 +157,7 @@ var SlugSubstituteRuneTests = []struct {
 	out  string
 }{
 	{map[rune]string{'o': "no"}, "o o o", "no no no"},
+	{map[rune]string{'\'': " "}, "That's great", "That s great"},
 }
 
 func TestSubstituteRuneLang(t *testing.T) {
@@ -111,7 +165,7 @@ func TestSubstituteRuneLang(t *testing.T) {
 		text := SubstituteRune(ssrt.in, ssrt.cSub)
 		if ssrt.out != text {
 			t.Errorf(
-				"%d. SubstituteRune(%v, %v) => out = %v, want %v",
+				"%d. SubstituteRune(%q, %q) => out = %q, want %q",
 				index, ssrt.in, ssrt.cSub, text, ssrt.out)
 		}
 	}
