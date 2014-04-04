@@ -12,7 +12,7 @@ Example:
 	package main
 
 	import(
-		"bitbucket.org/gosimple/slug"
+		"github.com/gosimple/slug"
 		"fmt"
 	)
 
@@ -38,6 +38,6 @@ Example:
 
 Requests or bugs?
 
-https://bitbucket.org/gosimple/slug/issues
+https://github.com/gosimple/slug/issues
 */
 package slug

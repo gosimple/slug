@@ -4,15 +4,15 @@ slug
 Package `slug` generate slug from unicode string, URL-friendly slugify with
 multiple languages support.
 
-[![GoDoc](https://godoc.org/bitbucket.org/gosimple/slug?status.png)](https://godoc.org/bitbucket.org/gosimple/slug)
-[![Build Status](https://drone.io/bitbucket.org/gosimple/slug/status.png)](https://drone.io/bitbucket.org/gosimple/slug/latest)
+[![GoDoc](https://godoc.org/github.com/gosimple/slug?status.png)](https://godoc.org/github.com/gosimple/slug)
+[![Build Status](https://drone.io/github.com/gosimple/slug/status.png)](https://drone.io/github.com/gosimple/slug/latest)
 
 ## Example
 
 	package main
 
 	import(
-		"bitbucket.org/gosimple/slug"
+		"github.com/gosimple/slug"
 	    "fmt"
 	)
 
@@ -37,11 +37,11 @@ multiple languages support.
 	}
 
 ### Requests or bugs?
-<https://bitbucket.org/gosimple/slug/issues>
+<https://github.com/gosimple/slug/issues>
 
 ## Installation
 
-	go get -u bitbucket.org/gosimple/slug
+	go get -u github.com/gosimple/slug
 
 ## License
 
