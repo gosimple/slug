@@ -7,6 +7,8 @@ multiple languages support.
 [![GoDoc](https://godoc.org/github.com/gosimple/slug?status.png)](https://godoc.org/github.com/gosimple/slug)
 [![Build Status](https://drone.io/github.com/gosimple/slug/status.png)](https://drone.io/github.com/gosimple/slug/latest)
 
+[Documentation online](http://godoc.org/github.com/gosimple/slug)
+
 ## Example
 
 	package main
