@@ -21,6 +21,6 @@ var plSub = map[rune]string{
 }
 
 var esSub = map[rune]string{
-	'&': "i",
-	'@': "na",
+	'&': "y",
+	'@': "en",
 }
