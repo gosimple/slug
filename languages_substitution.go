@@ -19,3 +19,8 @@ var plSub = map[rune]string{
 	'&': "i",
 	'@': "na",
 }
+
+var esSub = map[rune]string{
+	'&': "i",
+	'@': "na",
+}
