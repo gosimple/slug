@@ -67,6 +67,7 @@ var SlugMakeLangTests = []struct {
 	{"en", "This & that", "this-and-that"},
 	{"de", "This & that", "this-und-that"},
 	{"pl", "This & that", "this-i-that"},
+	{"es", "This & that", "this-y-that"},
 	{"test", "This & that", "this-and-that"}, // unknown lang, fallback to "en"
 }
 
