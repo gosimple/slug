@@ -12,8 +12,8 @@ import (
 //=============================================================================
 
 var SlugMakeTests = []struct {
-	in  string
-	out string
+	in   string
+	want string
 }{
 	{"DOBROSLAWZYBORT", "dobroslawzybort"},
 	{"Dobroslaw Zybort", "dobroslaw-zybort"},
@@ -50,11 +50,11 @@ var SlugMakeTests = []struct {
 
 func TestSlugMake(t *testing.T) {
 	for index, st := range SlugMakeTests {
-		slug := Make(st.in)
-		if st.out != slug {
+		got := Make(st.in)
+		if got != st.want {
 			t.Errorf(
-				"%d. Make(%q) => out = %q, want %q",
-				index, st.in, slug, st.out)
+				"%d. Make(%#v) = %#v; want %#v",
+				index, st.in, got, st.want)
 		}
 	}
 }
@@ -62,7 +62,7 @@ func TestSlugMake(t *testing.T) {
 var SlugMakeLangTests = []struct {
 	lang string
 	in   string
-	out  string
+	want string
 }{
 	{"en", "This & that", "this-and-that"},
 	{"de", "This & that", "this-und-that"},
@@ -73,11 +73,11 @@ var SlugMakeLangTests = []struct {
 
 func TestSlugMakeLang(t *testing.T) {
 	for index, smlt := range SlugMakeLangTests {
-		slug := MakeLang(smlt.in, smlt.lang)
-		if smlt.out != slug {
+		got := MakeLang(smlt.in, smlt.lang)
+		if got != smlt.want {
 			t.Errorf(
-				"%d. MakeLang(%q, %q) => out = %q, want %q",
-				index, smlt.in, smlt.lang, slug, smlt.out)
+				"%d. MakeLang(%#v, %#v) = %#v; want %#v",
+				index, smlt.in, smlt.lang, got, smlt.want)
 		}
 	}
 }
@@ -86,7 +86,7 @@ var SlugMakeUserSubstituteTests = []struct {
 	cSub map[string]string
 	lang string
 	in   string
-	out  string
+	want string
 }{
 	{map[string]string{"'": " "}, "en", "That's great", "that-s-great"},
 	{map[string]string{"&": "or"}, "en", "This & that", "this-or-that"}, // by default "&" => "and"
@@ -96,12 +96,12 @@ var SlugMakeUserSubstituteTests = []struct {
 func TestSlugMakeUserSubstituteLang(t *testing.T) {
 	for index, smust := range SlugMakeUserSubstituteTests {
 		CustomSub = smust.cSub
-		slug := MakeLang(smust.in, smust.lang)
-		if smust.out != slug {
+		got := MakeLang(smust.in, smust.lang)
+		if got != smust.want {
 			t.Errorf(
-				"%d. %q; MakeLang(%q, %q) => out = %q, want %q",
+				"%d. %#v; MakeLang(%#v, %#v) = %#v; want %#v",
 				index, smust.cSub, smust.in, smust.lang,
-				slug, smust.out)
+				got, smust.want)
 
 		}
 	}
@@ -112,7 +112,7 @@ var SlugMakeSubstituteOrderTests = []struct {
 	rSub map[rune]string
 	sSub map[string]string
 	in   string
-	out  string
+	want string
 }{
 	{map[rune]string{'o': "left"}, map[string]string{"o": "right"}, "o o", "left-left"},
 	{map[rune]string{'&': "down"}, map[string]string{"&": "up"}, "&", "down"},
@@ -122,12 +122,12 @@ func TestSlugMakeSubstituteOrderLang(t *testing.T) {
 	for index, smsot := range SlugMakeSubstituteOrderTests {
 		CustomRuneSub = smsot.rSub
 		CustomSub = smsot.sSub
-		slug := Make(smsot.in)
-		if smsot.out != slug {
+		got := Make(smsot.in)
+		if got != smsot.want {
 			t.Errorf(
-				"%d. %q; %q; Make(%q) => out = %q, want %q",
+				"%d. %#v; %#v; Make(%#v) = %#v; want %#v",
 				index, smsot.rSub, smsot.sSub, smsot.in,
-				slug, smsot.out)
+				got, smsot.want)
 
 		}
 	}
@@ -136,7 +136,7 @@ func TestSlugMakeSubstituteOrderLang(t *testing.T) {
 var SlugSubstituteTests = []struct {
 	cSub map[string]string
 	in   string
-	out  string
+	want string
 }{
 	{map[string]string{"o": "no"}, "o o o", "no no no"},
 	{map[string]string{"'": " "}, "That's great", "That s great"},
@@ -144,11 +144,11 @@ var SlugSubstituteTests = []struct {
 
 func TestSubstituteLang(t *testing.T) {
 	for index, sst := range SlugSubstituteTests {
-		text := Substitute(sst.in, sst.cSub)
-		if sst.out != text {
+		got := Substitute(sst.in, sst.cSub)
+		if got != sst.want {
 			t.Errorf(
-				"%d. Substitute(%q, %q) => out = %q, want %q",
-				index, sst.in, sst.cSub, text, sst.out)
+				"%d. Substitute(%#v, %#v) = %#v; want %#v",
+				index, sst.in, sst.cSub, got, sst.want)
 		}
 	}
 }
@@ -156,7 +156,7 @@ func TestSubstituteLang(t *testing.T) {
 var SlugSubstituteRuneTests = []struct {
 	cSub map[rune]string
 	in   string
-	out  string
+	want string
 }{
 	{map[rune]string{'o': "no"}, "o o o", "no no no"},
 	{map[rune]string{'\'': " "}, "That's great", "That s great"},
@@ -164,11 +164,11 @@ var SlugSubstituteRuneTests = []struct {
 
 func TestSubstituteRuneLang(t *testing.T) {
 	for index, ssrt := range SlugSubstituteRuneTests {
-		text := SubstituteRune(ssrt.in, ssrt.cSub)
-		if ssrt.out != text {
+		got := SubstituteRune(ssrt.in, ssrt.cSub)
+		if got != ssrt.want {
 			t.Errorf(
-				"%d. SubstituteRune(%q, %q) => out = %q, want %q",
-				index, ssrt.in, ssrt.cSub, text, ssrt.out)
+				"%d. SubstituteRune(%#v, %#v) = %#v; want %#v",
+				index, ssrt.in, ssrt.cSub, got, ssrt.want)
 		}
 	}
 }
@@ -176,7 +176,7 @@ func TestSubstituteRuneLang(t *testing.T) {
 var SlugMakeSmartTruncateTests = []struct {
 	in        string
 	maxLength int
-	out       string
+	want      string
 }{
 	{"DOBROSLAWZYBORT", 100, "dobroslawzybort"},
 	{"Dobroslaw Zybort", 100, "dobroslaw-zybort"},
@@ -189,11 +189,11 @@ var SlugMakeSmartTruncateTests = []struct {
 func TestSlugMakeSmartTruncate(t *testing.T) {
 	for index, smstt := range SlugMakeSmartTruncateTests {
 		MaxLength = smstt.maxLength
-		slug := Make(smstt.in)
-		if smstt.out != slug {
+		got := Make(smstt.in)
+		if got != smstt.want {
 			t.Errorf(
-				"%d. MaxLength = %v; Make(%q) => out = %q, want %q",
-				index, smstt.maxLength, smstt.in, slug, smstt.out)
+				"%d. MaxLength = %v; Make(%#v) = %#v; want %#v",
+				index, smstt.maxLength, smstt.in, got, smstt.want)
 		}
 	}
 }
