@@ -11,45 +11,45 @@ import (
 
 //=============================================================================
 
-var SlugMakeTests = []struct {
-	in   string
-	want string
-}{
-	{"DOBROSLAWZYBORT", "dobroslawzybort"},
-	{"Dobroslaw Zybort", "dobroslaw-zybort"},
-	{"  Dobroslaw     Zybort  ?", "dobroslaw-zybort"},
-	{"Dobrosław Żybort", "dobroslaw-zybort"},
-	{"Ala ma 6 kotów.", "ala-ma-6-kotow"},
-
-	{"áÁàÀãÃâÂäÄąĄą̊Ą̊", "aaaaaaaaaaaaaa"},
-	{"ćĆĉĈçÇ", "cccccc"},
-	{"éÉèÈẽẼêÊëËęĘ", "eeeeeeeeeeee"},
-	{"íÍìÌĩĨîÎïÏįĮ", "iiiiiiiiiiii"},
-	{"łŁ", "ll"},
-	{"ńŃ", "nn"},
-	{"óÓòÒõÕôÔöÖǫǪǭǬø", "ooooooooooooooo"},
-	{"śŚ", "ss"},
-	{"úÚùÙũŨûÛüÜųŲ", "uuuuuuuuuuuu"},
-	{"y̨Y̨", "yy"},
-	{"źŹżŹ", "zzzz"},
-	{"·/,:;`˜'\"", ""},
-	{"2000–2013", "2000-2013"},
-	{"style—not", "style-not"},
-	{"test_slug", "test_slug"},
-	{"Æ", "ae"},
-	{"Ich heiße", "ich-heisse"},
-
-	{"This & that", "this-and-that"},
-	{"fácil €", "facil-eu"},
-	{"smile ☺", "smile"},
-	{"Hellö Wörld хелло ворлд", "hello-world-khello-vorld"},
-	{"\"C'est déjà l’été.\"", "cest-deja-lete"},
-	{"jaja---lol-méméméoo--a", "jaja-lol-mememeoo-a"},
-	{"影師", "ying-shi"},
-}
-
 func TestSlugMake(t *testing.T) {
-	for index, st := range SlugMakeTests {
+	var testCases = []struct {
+		in   string
+		want string
+	}{
+		{"DOBROSLAWZYBORT", "dobroslawzybort"},
+		{"Dobroslaw Zybort", "dobroslaw-zybort"},
+		{"  Dobroslaw     Zybort  ?", "dobroslaw-zybort"},
+		{"Dobrosław Żybort", "dobroslaw-zybort"},
+		{"Ala ma 6 kotów.", "ala-ma-6-kotow"},
+
+		{"áÁàÀãÃâÂäÄąĄą̊Ą̊", "aaaaaaaaaaaaaa"},
+		{"ćĆĉĈçÇ", "cccccc"},
+		{"éÉèÈẽẼêÊëËęĘ", "eeeeeeeeeeee"},
+		{"íÍìÌĩĨîÎïÏįĮ", "iiiiiiiiiiii"},
+		{"łŁ", "ll"},
+		{"ńŃ", "nn"},
+		{"óÓòÒõÕôÔöÖǫǪǭǬø", "ooooooooooooooo"},
+		{"śŚ", "ss"},
+		{"úÚùÙũŨûÛüÜųŲ", "uuuuuuuuuuuu"},
+		{"y̨Y̨", "yy"},
+		{"źŹżŹ", "zzzz"},
+		{"·/,:;`˜'\"", ""},
+		{"2000–2013", "2000-2013"},
+		{"style—not", "style-not"},
+		{"test_slug", "test_slug"},
+		{"Æ", "ae"},
+		{"Ich heiße", "ich-heisse"},
+
+		{"This & that", "this-and-that"},
+		{"fácil €", "facil-eu"},
+		{"smile ☺", "smile"},
+		{"Hellö Wörld хелло ворлд", "hello-world-khello-vorld"},
+		{"\"C'est déjà l’été.\"", "cest-deja-lete"},
+		{"jaja---lol-méméméoo--a", "jaja-lol-mememeoo-a"},
+		{"影師", "ying-shi"},
+	}
+
+	for index, st := range testCases {
 		got := Make(st.in)
 		if got != st.want {
 			t.Errorf(
@@ -59,20 +59,20 @@ func TestSlugMake(t *testing.T) {
 	}
 }
 
-var SlugMakeLangTests = []struct {
-	lang string
-	in   string
-	want string
-}{
-	{"en", "This & that", "this-and-that"},
-	{"de", "This & that", "this-und-that"},
-	{"pl", "This & that", "this-i-that"},
-	{"es", "This & that", "this-y-that"},
-	{"test", "This & that", "this-and-that"}, // unknown lang, fallback to "en"
-}
-
 func TestSlugMakeLang(t *testing.T) {
-	for index, smlt := range SlugMakeLangTests {
+	var testCases = []struct {
+		lang string
+		in   string
+		want string
+	}{
+		{"en", "This & that", "this-and-that"},
+		{"de", "This & that", "this-und-that"},
+		{"pl", "This & that", "this-i-that"},
+		{"es", "This & that", "this-y-that"},
+		{"test", "This & that", "this-and-that"}, // unknown lang, fallback to "en"
+	}
+
+	for index, smlt := range testCases {
 		got := MakeLang(smlt.in, smlt.lang)
 		if got != smlt.want {
 			t.Errorf(
@@ -82,19 +82,19 @@ func TestSlugMakeLang(t *testing.T) {
 	}
 }
 
-var SlugMakeUserSubstituteTests = []struct {
-	cSub map[string]string
-	lang string
-	in   string
-	want string
-}{
-	{map[string]string{"'": " "}, "en", "That's great", "that-s-great"},
-	{map[string]string{"&": "or"}, "en", "This & that", "this-or-that"}, // by default "&" => "and"
-	{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"}, // by default "&" => "und"
-}
-
 func TestSlugMakeUserSubstituteLang(t *testing.T) {
-	for index, smust := range SlugMakeUserSubstituteTests {
+	var testCases = []struct {
+		cSub map[string]string
+		lang string
+		in   string
+		want string
+	}{
+		{map[string]string{"'": " "}, "en", "That's great", "that-s-great"},
+		{map[string]string{"&": "or"}, "en", "This & that", "this-or-that"}, // by default "&" => "and"
+		{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"}, // by default "&" => "und"
+	}
+
+	for index, smust := range testCases {
 		CustomSub = smust.cSub
 		got := MakeLang(smust.in, smust.lang)
 		if got != smust.want {
@@ -107,19 +107,19 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 	}
 }
 
-// Always substitute runes first
-var SlugMakeSubstituteOrderTests = []struct {
-	rSub map[rune]string
-	sSub map[string]string
-	in   string
-	want string
-}{
-	{map[rune]string{'o': "left"}, map[string]string{"o": "right"}, "o o", "left-left"},
-	{map[rune]string{'&': "down"}, map[string]string{"&": "up"}, "&", "down"},
-}
-
 func TestSlugMakeSubstituteOrderLang(t *testing.T) {
-	for index, smsot := range SlugMakeSubstituteOrderTests {
+	// Always substitute runes first
+	var testCases = []struct {
+		rSub map[rune]string
+		sSub map[string]string
+		in   string
+		want string
+	}{
+		{map[rune]string{'o': "left"}, map[string]string{"o": "right"}, "o o", "left-left"},
+		{map[rune]string{'&': "down"}, map[string]string{"&": "up"}, "&", "down"},
+	}
+
+	for index, smsot := range testCases {
 		CustomRuneSub = smsot.rSub
 		CustomSub = smsot.sSub
 		got := Make(smsot.in)
@@ -133,17 +133,17 @@ func TestSlugMakeSubstituteOrderLang(t *testing.T) {
 	}
 }
 
-var SlugSubstituteTests = []struct {
-	cSub map[string]string
-	in   string
-	want string
-}{
-	{map[string]string{"o": "no"}, "o o o", "no no no"},
-	{map[string]string{"'": " "}, "That's great", "That s great"},
-}
-
 func TestSubstituteLang(t *testing.T) {
-	for index, sst := range SlugSubstituteTests {
+	var testCases = []struct {
+		cSub map[string]string
+		in   string
+		want string
+	}{
+		{map[string]string{"o": "no"}, "o o o", "no no no"},
+		{map[string]string{"'": " "}, "That's great", "That s great"},
+	}
+
+	for index, sst := range testCases {
 		got := Substitute(sst.in, sst.cSub)
 		if got != sst.want {
 			t.Errorf(
@@ -153,17 +153,17 @@ func TestSubstituteLang(t *testing.T) {
 	}
 }
 
-var SlugSubstituteRuneTests = []struct {
-	cSub map[rune]string
-	in   string
-	want string
-}{
-	{map[rune]string{'o': "no"}, "o o o", "no no no"},
-	{map[rune]string{'\'': " "}, "That's great", "That s great"},
-}
-
 func TestSubstituteRuneLang(t *testing.T) {
-	for index, ssrt := range SlugSubstituteRuneTests {
+	var testCases = []struct {
+		cSub map[rune]string
+		in   string
+		want string
+	}{
+		{map[rune]string{'o': "no"}, "o o o", "no no no"},
+		{map[rune]string{'\'': " "}, "That's great", "That s great"},
+	}
+
+	for index, ssrt := range testCases {
 		got := SubstituteRune(ssrt.in, ssrt.cSub)
 		if got != ssrt.want {
 			t.Errorf(
@@ -173,21 +173,21 @@ func TestSubstituteRuneLang(t *testing.T) {
 	}
 }
 
-var SlugMakeSmartTruncateTests = []struct {
-	in        string
-	maxLength int
-	want      string
-}{
-	{"DOBROSLAWZYBORT", 100, "dobroslawzybort"},
-	{"Dobroslaw Zybort", 100, "dobroslaw-zybort"},
-	{"Dobroslaw Zybort", 12, "dobroslaw"},
-	{"  Dobroslaw     Zybort  ?", 12, "dobroslaw"},
-	{"Ala ma 6 kotów.", 10, "ala-ma-6"},
-	{"Dobrosław Żybort", 5, "dobro"},
-}
-
 func TestSlugMakeSmartTruncate(t *testing.T) {
-	for index, smstt := range SlugMakeSmartTruncateTests {
+	var testCases = []struct {
+		in        string
+		maxLength int
+		want      string
+	}{
+		{"DOBROSLAWZYBORT", 100, "dobroslawzybort"},
+		{"Dobroslaw Zybort", 100, "dobroslaw-zybort"},
+		{"Dobroslaw Zybort", 12, "dobroslaw"},
+		{"  Dobroslaw     Zybort  ?", 12, "dobroslaw"},
+		{"Ala ma 6 kotów.", 10, "ala-ma-6"},
+		{"Dobrosław Żybort", 5, "dobro"},
+	}
+
+	for index, smstt := range testCases {
 		MaxLength = smstt.maxLength
 		got := Make(smstt.in)
 		if got != smstt.want {
