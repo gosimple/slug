@@ -301,7 +301,7 @@ func BenchmarkSubstituteRuneLong(b *testing.B) {
 }
 
 func BenchmarkSmartTruncateShort(b *testing.B) {
-	shortStr := "Hello world"
+	shortStr := "Hello-world"
 	MaxLength = 8
 
 	b.ReportAllocs()
@@ -312,21 +312,21 @@ func BenchmarkSmartTruncateShort(b *testing.B) {
 }
 
 func BenchmarkSmartTruncateLong(b *testing.B) {
-	longStr := "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi " +
-		"pulvinar sodales ultrices. Nulla facilisi. Sed at vestibulum erat. Ut " +
-		"sit amet urna posuere, sagittis eros ac, varius nisi. Morbi ullamcorper " +
-		"odio at nunc pulvinar mattis. Vestibulum rutrum, ante eu dictum mattis, " +
-		"elit risus finibus nunc, consectetur facilisis eros leo ut sapien. Sed " +
-		"pulvinar volutpat mi. Cras semper mi ac eros accumsan, at feugiat massa " +
-		"elementum. Morbi eget dolor sit amet purus condimentum egestas non ut " +
-		"sapien. Duis feugiat magna vitae nisi lobortis, quis finibus sem " +
-		"sollicitudin. Pellentesque eleifend blandit ipsum, ut porta arcu " +
-		"ultricies et. Fusce vel ipsum porta, placerat diam ac, consectetur " +
-		"magna. Nulla in porta sem. Suspendisse commodo, felis in molestie " +
-		"ultricies, arcu ipsum aliquet turpis, elementum dapibus ipsum lorem a " +
-		"nisl. Etiam varius imperdiet placerat. Aliquam euismod lacus arcu, " +
-		"ultrices hendrerit est pellentesque vel. Aliquam sit amet laoreet leo. " +
-		"Integer eros libero, mollis sed posuere."
+	longStr := "Lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-Morbi-" +
+		"pulvinar-sodales-ultrices.-Nulla-facilisi.-Sed-at-vestibulum-erat.-Ut-" +
+		"sit-amet-urna-posuere,-sagittis-eros-ac,-varius-nisi.-Morbi-ullamcorper-" +
+		"odio-at-nunc-pulvinar-mattis.-Vestibulum-rutrum,-ante-eu-dictum-mattis,-" +
+		"elit-risus-finibus-nunc,-consectetur-facilisis-eros-leo-ut-sapien.-Sed-" +
+		"pulvinar-volutpat-mi.-Cras-semper-mi-ac-eros-accumsan,-at-feugiat-massa-" +
+		"elementum.-Morbi-eget-dolor-sit-amet-purus-condimentum-egestas-non-ut-" +
+		"sapien.-Duis-feugiat-magna-vitae-nisi-lobortis,-quis-finibus-sem-" +
+		"sollicitudin.-Pellentesque-eleifend-blandit-ipsum,-ut-porta-arcu-" +
+		"ultricies-et.-Fusce-vel-ipsum-porta,-placerat-diam-ac,-consectetur-" +
+		"magna.-Nulla-in-porta-sem.-Suspendisse-commodo,-felis-in-molestie-" +
+		"ultricies,-arcu-ipsum-aliquet-turpis,-elementum-dapibus-ipsum-lorem-a-" +
+		"nisl.-Etiam-varius-imperdiet-placerat.-Aliquam-euismod-lacus-arcu,-" +
+		"ultrices-hendrerit-est-pellentesque-vel.-Aliquam-sit-amet-laoreet-leo.-" +
+		"Integer-eros-libero,-mollis-sed-posuere."
 	MaxLength = 256
 
 	b.ReportAllocs()
