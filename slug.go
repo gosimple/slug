@@ -91,7 +91,7 @@ func Substitute(s string, sub map[string]string) (buf string) {
 
 // SubstituteRune substitutes string chars with provided rune
 // substitution map.
-func SubstituteRune(s string, sub map[rune]string) (result string) {
+func SubstituteRune(s string, sub map[rune]string) string {
 	var buf bytes.Buffer
 	for _, c := range s {
 		if d, ok := sub[c]; ok {
