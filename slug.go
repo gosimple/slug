@@ -24,6 +24,9 @@ var (
 	// slug will contain only substring from the first word truncated
 	// after MaxLength.
 	MaxLength int
+
+	regexpNonAuthorizedChars = regexp.MustCompile("[^a-z0-9-_]")
+	regexpMultipleDashes     = regexp.MustCompile("-+")
 )
 
 //=============================================================================
@@ -66,8 +69,8 @@ func MakeLang(s string, lang string) (slug string) {
 	slug = strings.ToLower(slug)
 
 	// Process all remaining symbols
-	slug = regexp.MustCompile("[^a-z0-9-_]").ReplaceAllString(slug, "-")
-	slug = regexp.MustCompile("-+").ReplaceAllString(slug, "-")
+	slug = regexpNonAuthorizedChars.ReplaceAllString(slug, "-")
+	slug = regexpMultipleDashes.ReplaceAllString(slug, "-")
 	slug = strings.Trim(slug, "-")
 
 	if MaxLength > 0 {
