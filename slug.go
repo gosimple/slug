@@ -6,10 +6,9 @@
 package slug
 
 import (
+	"bytes"
 	"regexp"
 	"strings"
-
-	"bytes"
 
 	"github.com/rainycape/unidecode"
 )
