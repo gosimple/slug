@@ -62,8 +62,6 @@ func MakeLang(s string, lang string) (slug string) {
 		slug = SubstituteRune(slug, enSub)
 	}
 
-	slug = SubstituteRune(slug, defaultSub)
-
 	// Process all non ASCII symbols
 	slug = unidecode.Unidecode(slug)
 

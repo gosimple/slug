@@ -5,6 +5,25 @@
 
 package slug
 
+func init() {
+	// Merge language subs with the default one
+	for _, sub := range []*map[rune]string{&deSub, &enSub, &plSub, &esSub} {
+		for key, value := range defaultSub {
+			(*sub)[key] = value
+		}
+	}
+}
+
+var defaultSub = map[rune]string{
+	'"':  "",
+	'\'': "",
+	'’':  "",
+	'‒':  "-", // figure dash
+	'–':  "-", // en dash
+	'—':  "-", // em dash
+	'―':  "-", // horizontal bar
+}
+
 var deSub = map[rune]string{
 	'&': "und",
 	'@': "an",
