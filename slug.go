@@ -84,7 +84,7 @@ func MakeLang(s string, lang string) (slug string) {
 func Substitute(s string, sub map[string]string) (buf string) {
 	buf = s
 	for key, val := range sub {
-		buf = strings.Replace(s, key, val, -1)
+		buf = strings.Replace(buf, key, val, -1)
 	}
 	return
 }
