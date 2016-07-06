@@ -15,12 +15,13 @@ import (
 )
 
 var (
-	// Custom substitution map
+	// CustomSub stores custom substitution map
 	CustomSub map[string]string
-	// Custom rune substitution map
+	// CustomRuneSub stores custom rune substitution map
 	CustomRuneSub map[rune]string
 
-	// Maximum slug length. It's smart so it will cat slug after full word.
+	// MaxLength stores maximum slug length.
+	// It's smart so it will cat slug after full word.
 	// By default slugs aren't shortened.
 	// If MaxLength is smaller than length of the first word, then returned
 	// slug will contain only substring from the first word truncated
