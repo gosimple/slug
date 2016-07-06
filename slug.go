@@ -8,6 +8,7 @@ package slug
 import (
 	"bytes"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/rainycape/unidecode"
@@ -80,17 +81,24 @@ func MakeLang(s string, lang string) (slug string) {
 }
 
 // Substitute returns string with superseded all substrings from
-// provided substitution map.
+// provided substitution map. Substitution map will be applied in alphabetic
+// order. Many passes, on one substitution another one could apply.
 func Substitute(s string, sub map[string]string) (buf string) {
 	buf = s
-	for key, val := range sub {
-		buf = strings.Replace(buf, key, val, -1)
+	var keys []string
+	for k := range sub {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key := range keys {
+		buf = strings.Replace(buf, key, sub[key], -1)
 	}
 	return
 }
 
 // SubstituteRune substitutes string chars with provided rune
-// substitution map.
+// substitution map. One pass.
 func SubstituteRune(s string, sub map[rune]string) string {
 	var buf bytes.Buffer
 	for _, c := range s {

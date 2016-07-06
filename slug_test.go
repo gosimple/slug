@@ -90,8 +90,8 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 		want string
 	}{
 		{map[string]string{"'": " "}, "en", "That's great", "that-s-great"},
-		{map[string]string{"&": "or"}, "en", "This & that", "this-or-that"}, // by default "&" => "and"
-		{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"}, // by default "&" => "und"
+		{map[string]string{"&": "or"}, "en", "This & that", "this-or-that"},                   // by default "&" => "and"
+		{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"},                   // by default "&" => "und"
 		{map[string]string{"&": "or", "@": "the"}, "de", "@ This & that", "the-this-or-that"}, // by default "&" => "und", "@" => "an"
 	}
 
@@ -143,7 +143,8 @@ func TestSubstituteLang(t *testing.T) {
 		want string
 	}{
 		{map[string]string{"o": "no"}, "o o o", "no no no"},
-		{map[string]string{"o": "no", "a": "or"}, "o a o", "no or no"},
+		{map[string]string{"o": "no", "a": "or"}, "o a o", "no nor no"},
+		{map[string]string{"a": "or", "o": "no"}, "o a o", "no nor no"},
 		{map[string]string{"'": " "}, "That's great", "That s great"},
 	}
 
@@ -165,6 +166,7 @@ func TestSubstituteRuneLang(t *testing.T) {
 	}{
 		{map[rune]string{'o': "no"}, "o o o", "no no no"},
 		{map[rune]string{'o': "no", 'a': "or"}, "o a o", "no or no"},
+		{map[rune]string{'a': "or", 'o': "no"}, "o a o", "no or no"},
 		{map[rune]string{'\'': " "}, "That's great", "That s great"},
 	}
 
