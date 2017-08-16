@@ -218,6 +218,7 @@ func TestIsSlug(t *testing.T) {
 		{"some", args{"some"}, true},
 		{"with -", args{"some-more"}, true},
 		{"with _", args{"some_more"}, true},
+		{"with numbers", args{"number-2"}, true},
 		{"upper case", args{"Some-more"}, false},
 		{"space", args{"some more"}, false},
 		{"outside ASCII", args{"Dobrosław Żybort"}, false},
