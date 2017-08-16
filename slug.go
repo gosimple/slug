@@ -142,7 +142,7 @@ func smartTruncate(text string) string {
 // All output from slug.Make(text) should pass this test.
 func IsSlug(text string) bool {
 	for _, c := range text {
-		if (c < 'a' || c > 'z') && c != '-' && c != '_' {
+		if (c < 'a' || c > 'z') && c != '-' && c != '_' && (c < '0' || c > '9') {
 			return false
 		}
 	}
