@@ -4,7 +4,8 @@ slug
 Package `slug` generate slug from unicode string, URL-friendly slugify with
 multiple languages support.
 
-[![GoDoc](https://godoc.org/github.com/gosimple/slug?status.png)](https://godoc.org/github.com/gosimple/slug)
+[![GoDoc](https://godoc.org/github.com/gosimple/slug?status.png)](https://godoc.org/github.com/gosimple/slug)[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fgosimple%2Fslug.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fgosimple%2Fslug?ref=badge_shield)
+
 [![Build Status](https://drone.io/github.com/gosimple/slug/status.png)](https://drone.io/github.com/gosimple/slug/latest)
 
 [Documentation online](http://godoc.org/github.com/gosimple/slug)
@@ -52,3 +53,6 @@ The source files are distributed under the
 unless otherwise noted.
 Please read the [FAQ](http://www.mozilla.org/MPL/2.0/FAQ.html)
 if you have further questions regarding the license.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fgosimple%2Fslug.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fgosimple%2Fslug?ref=badge_large)
