@@ -24,6 +24,11 @@ var defaultSub = map[rune]string{
 	'―':  "-", // horizontal bar
 }
 
+var fiSub = map[rune]string{
+	'&': "ja",
+	'@': "at",
+}
+
 var nlSub = map[rune]string{
 	'&': "en",
 	'@': "at",
