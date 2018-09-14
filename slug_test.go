@@ -71,6 +71,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"es", "This & that", "this-y-that"},
 		{"gr", "This & that", "this-kai-that"},
 		{"nl", "This & that", "this-en-that"},
+		{"fi", "This & that", "this-ja-that"},
 		{"test", "This & that", "this-and-that"}, // unknown lang, fallback to "en"
 	}
 
