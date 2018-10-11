@@ -5,7 +5,7 @@ Package `slug` generate slug from unicode string, URL-friendly slugify with
 multiple languages support.
 
 [![GoDoc](https://godoc.org/github.com/gosimple/slug?status.png)](https://godoc.org/github.com/gosimple/slug)
-[![Build Status](https://drone.io/github.com/gosimple/slug/status.png)](https://drone.io/github.com/gosimple/slug/latest)
+[![Build Status](https://travis-ci.com/gosimple/slug.svg?branch=master)](https://travis-ci.com/gosimple/slug)
 
 [Documentation online](http://godoc.org/github.com/gosimple/slug)
 
