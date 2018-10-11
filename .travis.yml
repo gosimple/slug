@@ -11,7 +11,7 @@ matrix:
 
 before_script:
   - go get -t -v ./...
-  - go get -v github.com/golang/lint/golint
+  - go get -v golang.org/x/lint/golint
   - go get -v honnef.co/go/tools/cmd/megacheck
   - go vet ./...
 script:
