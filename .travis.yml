@@ -1,5 +1,4 @@
 language: go
-go_import_path: github.com/gosimple/slug
 
 go:
   - "1.x"
@@ -15,8 +14,6 @@ before_script:
   - go get -v honnef.co/go/tools/cmd/megacheck
   - go vet ./...
 script:
-  # check if it even compiles
-  - go build
   # run all our tests with race detector
   - go test -v -race ./...
   # "go vet on steroids" + linter
