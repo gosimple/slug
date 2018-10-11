@@ -1,13 +1,23 @@
 language: go
-
-before_script:
-  - go vet ./...
+go_import_path: github.com/gosimple/slug
 
 go:
   - "1.x"
   - master
-
 matrix:
   allow_failures:
     - go: master
   fast_finish: true
+
+before_script:
+  - go get -t -v ./...
+  - go get -v github.com/golang/lint/golint
+  - go get -v honnef.co/go/tools/cmd/megacheck
+  - go vet ./...
+script:
+  # check if it even compiles
+  - go build
+  # run all our tests with race detector
+  - go test -v -race ./...
+  # "go vet on steroids" + linter
+  - megacheck ./...

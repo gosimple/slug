@@ -243,7 +243,7 @@ func TestIsSlug(t *testing.T) {
 
 	t.Run("MaxLength", func(t *testing.T) {
 		MaxLength = 4
-		if got := IsSlug("012345"); got != false {
+		if got := IsSlug("012345"); got {
 			t.Errorf("IsSlug() = %v, want %v", got, false)
 		}
 		MaxLength = 0
