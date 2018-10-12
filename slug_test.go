@@ -66,7 +66,10 @@ func TestSlugMakeLang(t *testing.T) {
 		want string
 	}{
 		{"en", "This & that", "this-and-that"},
+		{"en", "äÄäöÖöüÜü", "aaaooouuu"},
 		{"de", "This & that", "this-und-that"},
+		{"de", "Wir mögen Bücher & Käse", "wir-moegen-buecher-und-kaese"},
+		{"de", "Äpfel Über Österreich", "aepfel-ueber-oesterreich"},
 		{"pl", "This & that", "this-i-that"},
 		{"es", "This & that", "this-y-that"},
 		{"gr", "This & that", "this-kai-that"},
