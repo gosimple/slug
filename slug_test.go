@@ -76,6 +76,15 @@ func TestSlugMakeLang(t *testing.T) {
 		{"nl", "This & that", "this-en-that"},
 		{"fi", "This & that", "this-ja-that"},
 		{"test", "This & that", "this-and-that"}, // unknown lang, fallback to "en"
+		// Test defaultSub, when adding new lang copy/paste this line,
+		// it contain special characters.
+		{"de", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
+		{"en", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
+		{"pl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
+		{"es", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
+		{"gr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
+		{"nl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
+		{"fi", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
 	}
 
 	for index, smlt := range testCases {
