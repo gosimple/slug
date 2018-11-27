@@ -8,8 +8,7 @@ package slug
 func init() {
 	// Merge language subs with the default one
 	for _, sub := range []*map[rune]string{
-		&deSub, &enSub, &plSub, &esSub,
-		&grSub, &nlSub, &fiSub,
+		&deSub, &enSub, &esSub, &fiSub, &grSub, &nlSub, &plSub,
 	} {
 		for key, value := range defaultSub {
 			(*sub)[key] = value
@@ -25,16 +24,6 @@ var defaultSub = map[rune]string{
 	'–':  "-", // en dash
 	'—':  "-", // em dash
 	'―':  "-", // horizontal bar
-}
-
-var fiSub = map[rune]string{
-	'&': "ja",
-	'@': "at",
-}
-
-var nlSub = map[rune]string{
-	'&': "en",
-	'@': "at",
 }
 
 var deSub = map[rune]string{
@@ -53,14 +42,14 @@ var enSub = map[rune]string{
 	'@': "at",
 }
 
-var plSub = map[rune]string{
-	'&': "i",
-	'@': "na",
-}
-
 var esSub = map[rune]string{
 	'&': "y",
 	'@': "en",
+}
+
+var fiSub = map[rune]string{
+	'&': "ja",
+	'@': "at",
 }
 
 var grSub = map[rune]string{
@@ -78,4 +67,14 @@ var grSub = map[rune]string{
 	'ώ': "w",
 	'Ω': "w",
 	'ϋ': "u",
+}
+
+var nlSub = map[rune]string{
+	'&': "en",
+	'@': "at",
+}
+
+var plSub = map[rune]string{
+	'&': "i",
+	'@': "na",
 }
