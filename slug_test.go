@@ -185,6 +185,35 @@ func TestSlugSeparator(t *testing.T) {
 	Separator = '-'
 }
 
+func TestSlugMakeLangSeparator(t *testing.T) {
+	var testCases = []struct {
+		separator rune
+		lang      string
+		in        string
+		want      string
+	}{
+		// & fun.
+		{'_', "de", "This & that", "this_und_that"},
+		{'_', "en", "This & that", "this_and_that"},
+		{'_', "test", "This & that", "this_and_that"}, // unknown lang, fallback to "en"
+		// Test defaultSub.
+		{'_', "de", "1\"2'3’4‒5–6—7―8", "1234_5_6_7_8"},
+		{'_', "en", "1\"2'3’4‒5–6—7―8", "1234_5_6_7_8"},
+	}
+
+	for index, smlt := range testCases {
+		Separator = smlt.separator
+		got := MakeLang(smlt.in, smlt.lang)
+		if got != smlt.want {
+			t.Errorf(
+				"%d. MakeLang(%#v, %#v) = %#v; want %#v",
+				index, smlt.in, smlt.lang, got, smlt.want)
+		}
+	}
+	// Global state...
+	Separator = '-'
+}
+
 func TestSubstituteLang(t *testing.T) {
 	var testCases = []struct {
 		cSub map[string]string
