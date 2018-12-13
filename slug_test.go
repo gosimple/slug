@@ -155,6 +155,36 @@ func TestSlugMakeSubstituteOrderLang(t *testing.T) {
 	}
 }
 
+func TestSlugSeparator(t *testing.T) {
+	MaxLength = 0
+	type args struct {
+		separator rune
+		text      string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{"separator -", args{'-', "test---slug"}, "test-slug"},
+		{"separator _", args{'_', "test___slug"}, "test_slug"},
+		{"separator /", args{'/', "test///slug"}, "test/slug"},
+		{"separator ☺", args{'☺', "test slug"}, "test☺slug"},
+		{"remove ASCII first", args{'☺', "test☺☺slug ☺"}, "testslug"},
+	}
+	for _, tt := range tests {
+		Separator = tt.args.separator
+
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Make(tt.args.text); got != tt.want {
+				t.Errorf("Make() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+	// Global state...
+	Separator = '-'
+}
+
 func TestSubstituteLang(t *testing.T) {
 	var testCases = []struct {
 		cSub map[string]string
@@ -208,6 +238,7 @@ func TestSlugMakeSmartTruncate(t *testing.T) {
 		{"DOBROSLAWZYBORT", 100, "dobroslawzybort"},
 		{"Dobroslaw Zybort", 100, "dobroslaw-zybort"},
 		{"Dobroslaw Zybort", 12, "dobroslaw"},
+		{"Dobroslaw-Zybort_-_-", 11, "dobroslaw"},
 		{"  Dobroslaw     Zybort  ?", 12, "dobroslaw"},
 		{"Ala ma 6 kotów.", 10, "ala-ma-6"},
 		{"Dobrosław Żybort", 5, "dobro"},
@@ -264,6 +295,36 @@ func TestIsSlug(t *testing.T) {
 		}
 		MaxLength = 0
 	})
+}
+
+func TestIsSlugSeparator(t *testing.T) {
+	MaxLength = 0
+	type args struct {
+		separator rune
+		text      string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{"separator -", args{'-', "test slug"}, true},
+		{"separator _", args{'_', "test slug"}, true},
+		{"separator /", args{'/', "test slug"}, true},
+		{"separator ☺", args{'☺', "test slug"}, true},
+	}
+	for _, tt := range tests {
+		Separator = tt.args.separator
+
+		t.Run(tt.name, func(t *testing.T) {
+			slug := Make(tt.args.text)
+			if got := IsSlug(slug); got != tt.want {
+				t.Errorf("IsSlug('%s') = %v, want %v", slug, got, tt.want)
+			}
+		})
+	}
+	// Global state...
+	Separator = '-'
 }
 
 func BenchmarkMakeShortAscii(b *testing.B) {
