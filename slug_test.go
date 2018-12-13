@@ -37,6 +37,8 @@ func TestSlugMake(t *testing.T) {
 		{"2000–2013", "2000-2013"},
 		{"style—not", "style-not"},
 		{"test_slug", "test_slug"},
+		{"_test_slug_", "test_slug"},
+		{"-test-slug-", "test-slug"},
 		{"Æ", "ae"},
 		{"Ich heiße", "ich-heisse"},
 
