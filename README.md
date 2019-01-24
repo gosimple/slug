@@ -6,6 +6,7 @@ multiple languages support.
 
 [![GoDoc](https://godoc.org/github.com/gosimple/slug?status.png)](https://godoc.org/github.com/gosimple/slug)
 [![Build Status](https://travis-ci.com/gosimple/slug.svg?branch=master)](https://travis-ci.com/gosimple/slug)
+[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
 
 [Documentation online](http://godoc.org/github.com/gosimple/slug)
 
