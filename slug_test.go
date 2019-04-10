@@ -71,6 +71,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"de", "Äpfel Über Österreich", "aepfel-ueber-oesterreich"},
 		{"en", "äÄäöÖöüÜü", "aaaooouuu"},
 		{"gr", "ϊχώΩϋ", "ixwwu"},
+		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc"},
 		// & fun.
 		{"de", "This & that", "this-und-that"},
 		{"en", "This & that", "this-and-that"},
@@ -79,6 +80,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"gr", "This & that", "this-kai-that"},
 		{"nl", "This & that", "this-en-that"},
 		{"pl", "This & that", "this-i-that"},
+		{"tr", "This & that", "this-ve-that"},
 		{"test", "This & that", "this-and-that"}, // unknown lang, fallback to "en"
 		// Test defaultSub, when adding new lang copy/paste this line,
 		// it contain special characters.
