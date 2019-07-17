@@ -12,7 +12,7 @@ import (
 //=============================================================================
 
 func TestSlugMake(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		in   string
 		want string
 	}{
@@ -62,7 +62,7 @@ func TestSlugMake(t *testing.T) {
 }
 
 func TestSlugMakeLang(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		lang string
 		in   string
 		want string
@@ -71,6 +71,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"de", "Äpfel Über Österreich", "aepfel-ueber-oesterreich"},
 		{"en", "äÄäöÖöüÜü", "aaaooouuu"},
 		{"gr", "ϊχώΩϋ", "ixwwu"},
+		{"Ell", "ϊχώΩϋ", "ixwwu"},
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc"},
 		// & fun.
 		{"de", "This & that", "this-und-that"},
@@ -78,8 +79,11 @@ func TestSlugMakeLang(t *testing.T) {
 		{"es", "This & that", "this-y-that"},
 		{"fi", "This & that", "this-ja-that"},
 		{"gr", "This & that", "this-kai-that"},
+		{"ell", "This & that", "this-kai-that"},
+		{"Ell", "This & that", "this-kai-that"},
 		{"nl", "This & that", "this-en-that"},
 		{"pl", "This & that", "this-i-that"},
+		{"pol", "This & that", "this-i-that"},
 		{"tr", "This & that", "this-ve-that"},
 		{"test", "This & that", "this-and-that"}, // unknown lang, fallback to "en"
 		// Test defaultSub, when adding new lang copy/paste this line,
@@ -104,7 +108,7 @@ func TestSlugMakeLang(t *testing.T) {
 }
 
 func TestSlugMakeUserSubstituteLang(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		cSub map[string]string
 		lang string
 		in   string
@@ -113,6 +117,8 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 		{map[string]string{"'": " "}, "en", "That's great", "that-s-great"},
 		{map[string]string{"&": "or"}, "en", "This & that", "this-or-that"},                   // by default "&" => "and"
 		{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"},                   // by default "&" => "und"
+		{map[string]string{"&": "or"}, "DEU", "This & that", "this-or-that"},                  // by default "&" => "und"
+		{map[string]string{"&": "or"}, "Fin", "This & that", "this-or-that"},                  // by default "&" => "ja"
 		{map[string]string{"&": "or", "@": "the"}, "de", "@ This & that", "the-this-or-that"}, // by default "&" => "und", "@" => "an"
 	}
 
@@ -124,14 +130,13 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 				"%d. %#v; MakeLang(%#v, %#v) = %#v; want %#v",
 				index, smust.cSub, smust.in, smust.lang,
 				got, smust.want)
-
 		}
 	}
 }
 
 func TestSlugMakeSubstituteOrderLang(t *testing.T) {
 	// Always substitute runes first
-	var testCases = []struct {
+	testCases := []struct {
 		rSub map[rune]string
 		sSub map[string]string
 		in   string
@@ -152,13 +157,12 @@ func TestSlugMakeSubstituteOrderLang(t *testing.T) {
 				"%d. %#v; %#v; Make(%#v) = %#v; want %#v",
 				index, smsot.rSub, smsot.sSub, smsot.in,
 				got, smsot.want)
-
 		}
 	}
 }
 
 func TestSubstituteLang(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		cSub map[string]string
 		in   string
 		want string
@@ -180,7 +184,7 @@ func TestSubstituteLang(t *testing.T) {
 }
 
 func TestSubstituteRuneLang(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		cSub map[rune]string
 		in   string
 		want string
@@ -202,7 +206,7 @@ func TestSubstituteRuneLang(t *testing.T) {
 }
 
 func TestSlugMakeSmartTruncate(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		in        string
 		maxLength int
 		want      string
@@ -274,6 +278,7 @@ func BenchmarkMakeShortAscii(b *testing.B) {
 		Make("Hello world")
 	}
 }
+
 func BenchmarkMakeShort(b *testing.B) {
 	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
