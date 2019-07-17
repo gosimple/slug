@@ -71,6 +71,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"de", "Äpfel Über Österreich", "aepfel-ueber-oesterreich"},
 		{"en", "äÄäöÖöüÜü", "aaaooouuu"},
 		{"gr", "ϊχώΩϋ", "ixwwu"},
+		{"Ell", "ϊχώΩϋ", "ixwwu"},
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc"},
 		// & fun.
 		{"de", "This & that", "this-und-that"},
@@ -78,8 +79,11 @@ func TestSlugMakeLang(t *testing.T) {
 		{"es", "This & that", "this-y-that"},
 		{"fi", "This & that", "this-ja-that"},
 		{"gr", "This & that", "this-kai-that"},
+		{"ell", "This & that", "this-kai-that"},
+		{"Ell", "This & that", "this-kai-that"},
 		{"nl", "This & that", "this-en-that"},
 		{"pl", "This & that", "this-i-that"},
+		{"pol", "This & that", "this-i-that"},
 		{"tr", "This & that", "this-ve-that"},
 		{"test", "This & that", "this-and-that"}, // unknown lang, fallback to "en"
 		// Test defaultSub, when adding new lang copy/paste this line,
@@ -113,6 +117,8 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 		{map[string]string{"'": " "}, "en", "That's great", "that-s-great"},
 		{map[string]string{"&": "or"}, "en", "This & that", "this-or-that"},                   // by default "&" => "and"
 		{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"},                   // by default "&" => "und"
+		{map[string]string{"&": "or"}, "DEU", "This & that", "this-or-that"},                  // by default "&" => "und"
+		{map[string]string{"&": "or"}, "Fin", "This & that", "this-or-that"},                  // by default "&" => "ja"
 		{map[string]string{"&": "or", "@": "the"}, "de", "@ This & that", "the-this-or-that"}, // by default "&" => "und", "@" => "an"
 	}
 

@@ -50,23 +50,24 @@ func MakeLang(s string, lang string) (slug string) {
 	slug = SubstituteRune(slug, CustomRuneSub)
 	slug = Substitute(slug, CustomSub)
 
-	// Process string with selected substitution language
-	switch lang {
-	case "de":
+	// Process string with selected substitution language.
+	// Catch ISO 3166-1, ISO 639-1:2002 and ISO 639-3:2007.
+	switch strings.ToLower(lang) {
+	case "de", "deu":
 		slug = SubstituteRune(slug, deSub)
-	case "en":
+	case "en", "eng":
 		slug = SubstituteRune(slug, enSub)
-	case "es":
+	case "es", "spa":
 		slug = SubstituteRune(slug, esSub)
-	case "fi":
+	case "fi", "fin":
 		slug = SubstituteRune(slug, fiSub)
-	case "gr":
+	case "gr", "el", "ell":
 		slug = SubstituteRune(slug, grSub)
-	case "nl":
+	case "nl", "nld":
 		slug = SubstituteRune(slug, nlSub)
-	case "pl":
+	case "pl", "pol":
 		slug = SubstituteRune(slug, plSub)
-	case "tr":
+	case "tr", "tur":
 		slug = SubstituteRune(slug, trSub)
 	default: // fallback to "en" if lang not found
 		slug = SubstituteRune(slug, enSub)
