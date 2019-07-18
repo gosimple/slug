@@ -16,14 +16,15 @@ func init() {
 	}
 }
 
+// BUG: Initialized on init so also impossible to set custom separator.
 var defaultSub = map[rune]string{
 	'"':  "",
 	'\'': "",
 	'’':  "",
-	'‒':  "-", // figure dash
-	'–':  "-", // en dash
-	'—':  "-", // em dash
-	'―':  "-", // horizontal bar
+	'‒':  string(Separator), // figure dash
+	'–':  string(Separator), // en dash
+	'—':  string(Separator), // em dash
+	'―':  string(Separator), // horizontal bar
 }
 
 var deSub = map[rune]string{

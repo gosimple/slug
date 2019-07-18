@@ -28,8 +28,13 @@ var (
 	// after MaxLength.
 	MaxLength int
 
-	regexpNonAuthorizedChars = regexp.MustCompile("[^a-z0-9-_]")
-	regexpMultipleDashes     = regexp.MustCompile("-+")
+	// Separator configure default separator for all slugs.
+	// By default set to '-'.
+	Separator = '-'
+
+	// BUG: Not possible to change separator from default.
+	regexpNonAuthorizedChars = regexp.MustCompile("[^a-z0-9-_" + string(Separator) + "]")
+	regexpMultipleSeparators = regexp.MustCompile(string(Separator) + "+")
 )
 
 //=============================================================================
@@ -79,13 +84,14 @@ func MakeLang(s string, lang string) (slug string) {
 	slug = strings.ToLower(slug)
 
 	// Process all remaining symbols
-	slug = regexpNonAuthorizedChars.ReplaceAllString(slug, "-")
-	slug = regexpMultipleDashes.ReplaceAllString(slug, "-")
-	slug = strings.Trim(slug, "-_")
+	slug = regexpNonAuthorizedChars.ReplaceAllString(slug, string(Separator))
+	slug = regexpMultipleSeparators.ReplaceAllString(slug, string(Separator))
 
 	if MaxLength > 0 {
 		slug = smartTruncate(slug)
 	}
+
+	slug = strings.Trim(slug, "-_"+string(Separator))
 
 	return slug
 }
@@ -140,7 +146,7 @@ func smartTruncate(text string) string {
 			break
 		}
 	}
-	return strings.Trim(truncated, "-")
+	return truncated
 }
 
 // IsSlug returns True if provided text does not contain white characters,
@@ -151,12 +157,15 @@ func smartTruncate(text string) string {
 func IsSlug(text string) bool {
 	if text == "" ||
 		(MaxLength > 0 && len(text) > MaxLength) ||
-		text[0] == '-' || text[0] == '_' ||
-		text[len(text)-1] == '-' || text[len(text)-1] == '_' {
+		strings.HasPrefix(text, "-") || strings.HasPrefix(text, "_") ||
+		strings.HasPrefix(text, string(Separator)) ||
+		strings.HasSuffix(text, "-") || strings.HasSuffix(text, "_") ||
+		strings.HasSuffix(text, string(Separator)) {
 		return false
 	}
 	for _, c := range text {
-		if (c < 'a' || c > 'z') && c != '-' && c != '_' && (c < '0' || c > '9') {
+		if (c < 'a' || c > 'z') && (c < '0' || c > '9') &&
+			c != '-' && c != '_' && c != Separator {
 			return false
 		}
 	}

@@ -214,6 +214,7 @@ func TestSlugMakeSmartTruncate(t *testing.T) {
 		{"DOBROSLAWZYBORT", 100, "dobroslawzybort"},
 		{"Dobroslaw Zybort", 100, "dobroslaw-zybort"},
 		{"Dobroslaw Zybort", 12, "dobroslaw"},
+		{"Dobroslaw-Zybort_-_-", 11, "dobroslaw"},
 		{"  Dobroslaw     Zybort  ?", 12, "dobroslaw"},
 		{"Ala ma 6 kotów.", 10, "ala-ma-6"},
 		{"Dobrosław Żybort", 5, "dobro"},
@@ -270,6 +271,95 @@ func TestIsSlug(t *testing.T) {
 		}
 		MaxLength = 0
 	})
+}
+
+func TestSeparatorSlug(t *testing.T) {
+	MaxLength = 0
+	type args struct {
+		separator rune
+		text      string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{"separator -", args{'-', "test---slug"}, "test-slug"},
+		{"separator _", args{'_', "test___slug"}, "test_slug"},
+		{"separator /", args{'/', "test///slug"}, "test/slug"},
+		{"separator ☺", args{'☺', "test slug"}, "test☺slug"},
+		{"remove ASCII first", args{'☺', "test☺☺slug ☺"}, "testslug"},
+	}
+	for _, tt := range tests {
+		Separator = tt.args.separator
+
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Make(tt.args.text); got != tt.want {
+				t.Errorf("Make() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+	// Global state...
+	Separator = '-'
+}
+
+func TestSeparatorSlugMakeLang(t *testing.T) {
+	var testCases = []struct {
+		separator rune
+		lang      string
+		in        string
+		want      string
+	}{
+		// & fun.
+		{'_', "de", "This & that", "this_und_that"},
+		{'_', "en", "This & that", "this_and_that"},
+		{'_', "test", "This & that", "this_and_that"}, // unknown lang, fallback to "en"
+		// Test defaultSub.
+		{'_', "de", "1\"2'3’4‒5–6—7―8", "1234_5_6_7_8"},
+		{'_', "en", "1\"2'3’4‒5–6—7―8", "1234_5_6_7_8"},
+	}
+
+	for index, smlt := range testCases {
+		Separator = smlt.separator
+		got := MakeLang(smlt.in, smlt.lang)
+		if got != smlt.want {
+			t.Errorf(
+				"%d. MakeLang(%#v, %#v) = %#v; want %#v",
+				index, smlt.in, smlt.lang, got, smlt.want)
+		}
+	}
+	// Global state...
+	Separator = '-'
+}
+
+func TestSeparatorIsSlug(t *testing.T) {
+	MaxLength = 0
+	type args struct {
+		separator rune
+		text      string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{"separator -", args{'-', "test slug"}, true},
+		{"separator _", args{'_', "test slug"}, true},
+		{"separator /", args{'/', "test slug"}, true},
+		{"separator ☺", args{'☺', "test slug"}, true},
+	}
+	for _, tt := range tests {
+		Separator = tt.args.separator
+
+		t.Run(tt.name, func(t *testing.T) {
+			slug := Make(tt.args.text)
+			if got := IsSlug(slug); got != tt.want {
+				t.Errorf("IsSlug('%s') = %v, want %v", slug, got, tt.want)
+			}
+		})
+	}
+	// Global state...
+	Separator = '-'
 }
 
 func BenchmarkMakeShortAscii(b *testing.B) {
