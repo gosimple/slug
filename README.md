@@ -32,9 +32,9 @@ func main() {
 	deText := slug.MakeLang("Diese & Dass", "de")
 	fmt.Println(deText) // Will print: "diese-und-dass"
 	
-	slug.Lowercase = false // keep uppercase characters
+	slug.Lowercase = false // Keep uppercase characters
 	deUppercaseText := slug.MakeLang("Diese & Dass", "de")
-    fmt.Println(deUppercaseText) // Will print: "Diese-und-Dass"
+        fmt.Println(deUppercaseText) // Will print: "Diese-und-Dass"
 
 	slug.CustomSub = map[string]string{
 		"water": "sand",
