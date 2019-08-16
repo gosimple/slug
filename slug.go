@@ -28,7 +28,11 @@ var (
 	// after MaxLength.
 	MaxLength int
 
-	regexpNonAuthorizedChars = regexp.MustCompile("[^a-z0-9-_]")
+	// Lowercase defines if the resulting slug is transformed to lowercase.
+	// Default is true.
+	Lowercase = true
+
+	regexpNonAuthorizedChars = regexp.MustCompile("[^a-zA-Z0-9-_]")
 	regexpMultipleDashes     = regexp.MustCompile("-+")
 )
 
@@ -76,7 +80,9 @@ func MakeLang(s string, lang string) (slug string) {
 	// Process all non ASCII symbols
 	slug = unidecode.Unidecode(slug)
 
-	slug = strings.ToLower(slug)
+	if Lowercase {
+		slug = strings.ToLower(slug)
+	}
 
 	// Process all remaining symbols
 	slug = regexpNonAuthorizedChars.ReplaceAllString(slug, "-")

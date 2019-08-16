@@ -66,38 +66,46 @@ func TestSlugMakeLang(t *testing.T) {
 		lang string
 		in   string
 		want string
+		lowercase bool
 	}{
-		{"de", "Wir mögen Bücher & Käse", "wir-moegen-buecher-und-kaese"},
-		{"de", "Äpfel Über Österreich", "aepfel-ueber-oesterreich"},
-		{"en", "äÄäöÖöüÜü", "aaaooouuu"},
-		{"gr", "ϊχώΩϋ", "ixwwu"},
-		{"Ell", "ϊχώΩϋ", "ixwwu"},
-		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc"},
+		{"de", "Wir mögen Bücher & Käse", "wir-moegen-buecher-und-kaese", true},
+		{"de", "Wir mögen Bücher & Käse", "Wir-moegen-Buecher-und-Kaese", false},
+		{"de", "Äpfel Über Österreich", "aepfel-ueber-oesterreich", true},
+		{"de", "Äpfel Über Österreich", "Aepfel-Ueber-Oesterreich", false},
+		{"en", "äÄäöÖöüÜü", "aaaooouuu", true},
+		{"en", "äÄäöÖöüÜü", "aAaoOouUu", false},
+		{"gr", "ϊχώΩϋ", "ixwwu", true},
+		{"gr", "ϊχώΩϋ", "ixwwu", false},
+		{"Ell", "ϊχώΩϋ", "ixwwu", true},
+		{"Ell", "ϊχώΩϋ", "ixwwu", false},
+		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc", true},
+		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicSUOIGC", false},
 		// & fun.
-		{"de", "This & that", "this-und-that"},
-		{"en", "This & that", "this-and-that"},
-		{"es", "This & that", "this-y-that"},
-		{"fi", "This & that", "this-ja-that"},
-		{"gr", "This & that", "this-kai-that"},
-		{"ell", "This & that", "this-kai-that"},
-		{"Ell", "This & that", "this-kai-that"},
-		{"nl", "This & that", "this-en-that"},
-		{"pl", "This & that", "this-i-that"},
-		{"pol", "This & that", "this-i-that"},
-		{"tr", "This & that", "this-ve-that"},
-		{"test", "This & that", "this-and-that"}, // unknown lang, fallback to "en"
+		{"de", "This & that", "this-und-that", true},
+		{"en", "This & that", "this-and-that", true},
+		{"es", "This & that", "this-y-that", true},
+		{"fi", "This & that", "this-ja-that", true},
+		{"gr", "This & that", "this-kai-that", true},
+		{"ell", "This & that", "this-kai-that", true},
+		{"Ell", "This & that", "this-kai-that", true},
+		{"nl", "This & that", "this-en-that", true},
+		{"pl", "This & that", "this-i-that", true},
+		{"pol", "This & that", "this-i-that", true},
+		{"tr", "This & that", "this-ve-that", true},
+		{"test", "This & that", "this-and-that", true}, // unknown lang, fallback to "en"
 		// Test defaultSub, when adding new lang copy/paste this line,
 		// it contain special characters.
-		{"de", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
-		{"en", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
-		{"es", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
-		{"fi", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
-		{"gr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
-		{"nl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
-		{"pl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8"},
+		{"de", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"en", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"es", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"fi", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"gr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"nl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"pl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 	}
 
 	for index, smlt := range testCases {
+		Lowercase = smlt.lowercase
 		got := MakeLang(smlt.in, smlt.lang)
 		if got != smlt.want {
 			t.Errorf(
