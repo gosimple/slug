@@ -7,6 +7,7 @@ package slug
 
 import (
 	"bytes"
+	"fmt"
 	"regexp"
 	"sort"
 	"strings"
@@ -32,9 +33,43 @@ var (
 	// Default is true.
 	Lowercase = true
 
-	regexpNonAuthorizedChars = regexp.MustCompile("[^a-zA-Z0-9-_]")
-	regexpMultipleDashes     = regexp.MustCompile("-+")
+	regexpNonAuthorizedChars *regexp.Regexp
+	regexpMultipleSeparators *regexp.Regexp
+	regexpTrimSeparators     *regexp.Regexp
+	regexpIsSlug             *regexp.Regexp
+
+	separator string
 )
+
+// SetSeparator sets the separator that's used between "words"
+func SetSeparator(s string) {
+	separator = s
+	quotedSeparator := regexp.QuoteMeta(s)
+
+	regexpNonAuthorizedChars = regexp.MustCompile("[^a-zA-Z0-9-_]")
+
+	// let the separator be 0 length, in the event of no separator being wanted
+	// in this case we can set it to "nil" and check that it's not before use laster
+	if len(s) != 0 {
+		regexpMultipleSeparators = regexp.MustCompile(fmt.Sprintf("(%s)+", quotedSeparator))
+		regexpTrimSeparators = regexp.MustCompile(fmt.Sprintf("^(%s)+|(%s)+$", quotedSeparator, quotedSeparator))
+		regexpIsSlug = regexp.MustCompile(fmt.Sprintf("^(?:%s)|(?:%s)$|(?:%s)(?:%s)|([^a-z0-9-_]+)",
+			quotedSeparator, quotedSeparator, quotedSeparator, quotedSeparator))
+	} else {
+		regexpMultipleSeparators = nil
+		regexpTrimSeparators = nil
+		regexpIsSlug = nil
+	}
+}
+
+// GetSeparator returns the current separator
+func GetSeparator() string {
+	return separator
+}
+
+func init() {
+	SetSeparator("-")
+}
 
 //=============================================================================
 
@@ -85,8 +120,21 @@ func MakeLang(s string, lang string) (slug string) {
 	}
 
 	// Process all remaining symbols
-	slug = regexpNonAuthorizedChars.ReplaceAllString(slug, "-")
-	slug = regexpMultipleDashes.ReplaceAllString(slug, "-")
+	// Break slug by separator so we don't replace sep chars
+	// if the chars are not in regexpNonAuthorizedChars, while
+	// also not considring all sep chars safe (make sure the
+	// separator is only being considered as is)
+	slugParts := strings.Split(slug, separator)
+	for i, p := range slugParts {
+		slugParts[i] = regexpNonAuthorizedChars.ReplaceAllString(p, separator)
+	}
+	slug = strings.Join(slugParts, separator)
+
+	// if the separator is nothing then we don't need to remove/trim nothing
+	if len(separator) != 0 {
+		slug = regexpMultipleSeparators.ReplaceAllString(slug, separator)
+		slug = regexpTrimSeparators.ReplaceAllString(slug, "")
+	}
 	slug = strings.Trim(slug, "-_")
 
 	if MaxLength > 0 {
@@ -132,26 +180,36 @@ func smartTruncate(text string) string {
 		return text
 	}
 
-	var truncated string
-	words := strings.SplitAfter(text, "-")
-	// If MaxLength is smaller than length of the first word return word
-	// truncated after MaxLength.
-	if len(words[0]) > MaxLength {
-		return words[0][:MaxLength]
-	}
-	for _, word := range words {
-		if len(truncated)+len(word)-1 <= MaxLength {
-			truncated = truncated + word
-		} else {
-			break
+	// check if the separator is empty or not, if empty
+	// we can do a simple slice of the string
+	if len(separator) != 0 {
+		var truncated string
+		words := strings.SplitAfter(text, separator)
+
+		// If MaxLength is smaller than length of the first word return word
+		// truncated after MaxLength.
+		if len(words[0]) > MaxLength {
+			return words[0][:MaxLength]
 		}
+		for _, word := range words {
+			if len(truncated)+len(word)-1 <= MaxLength {
+				truncated = truncated + word
+			} else {
+				break
+			}
+		}
+		truncated = regexpTrimSeparators.ReplaceAllString(truncated, "")
+		return strings.Trim(truncated, "-_")
 	}
-	return strings.Trim(truncated, "-")
+
+	return text[:MaxLength]
 }
 
-// IsSlug returns True if provided text does not contain white characters,
-// punctuation, all letters are lower case and only from ASCII range.
-// It could contain `-` and `_` but not at the beginning or end of the text.
+// IsSlug returns True if provided text does not contain anything that
+// isn't a-z, A-Z, 0-9, dashes, underscores, or the separator strings.
+// It can't contain `-` and `_` at the beginning or end of the text.
+// It could contain the separator, but not at the beginning or end of the text,
+// or multiple consecutive separators.
 // It should be in range of the MaxLength var if specified.
 // All output from slug.Make(text) should pass this test.
 func IsSlug(text string) bool {
@@ -161,10 +219,26 @@ func IsSlug(text string) bool {
 		text[len(text)-1] == '-' || text[len(text)-1] == '_' {
 		return false
 	}
-	for _, c := range text {
-		if (c < 'a' || c > 'z') && c != '-' && c != '_' && (c < '0' || c > '9') {
+
+	if len(separator) == 0 {
+		return true
+	}
+
+	matches := regexpIsSlug.FindAllStringSubmatch(text, -1)
+
+	// no matches mean we didn't find anything we know to be bad
+	if matches == nil {
+		return true
+	}
+
+	// check if the 2nd, `m[1]`, match is equal to the separator
+	// if it is, then we're fine, but if it isn't, then our
+	// alphanum-dash-underscore check found something bad
+	for _, m := range matches {
+		if m[1] != separator {
 			return false
 		}
 	}
+
 	return true
 }
