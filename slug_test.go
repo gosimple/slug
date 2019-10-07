@@ -63,9 +63,9 @@ func TestSlugMake(t *testing.T) {
 
 func TestSlugMakeLang(t *testing.T) {
 	testCases := []struct {
-		lang string
-		in   string
-		want string
+		lang      string
+		in        string
+		want      string
 		lowercase bool
 	}{
 		{"de", "Wir mögen Bücher & Käse", "wir-moegen-buecher-und-kaese", true},
@@ -91,6 +91,10 @@ func TestSlugMakeLang(t *testing.T) {
 		{"nl", "This & that", "this-en-that", true},
 		{"pl", "This & that", "this-i-that", true},
 		{"pol", "This & that", "this-i-that", true},
+		{"sv", "This & that", "this-och-that", true},
+		{"sv", "This @ that", "this-snabel-a-that", true},
+		{"swe", "This & that", "this-och-that", true},
+		{"swe", "This @ that", "this-snabel-a-that", true},
 		{"tr", "This & that", "this-ve-that", true},
 		{"test", "This & that", "this-and-that", true}, // unknown lang, fallback to "en"
 		// Test defaultSub, when adding new lang copy/paste this line,
@@ -127,6 +131,7 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 		{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"},                   // by default "&" => "und"
 		{map[string]string{"&": "or"}, "DEU", "This & that", "this-or-that"},                  // by default "&" => "und"
 		{map[string]string{"&": "or"}, "Fin", "This & that", "this-or-that"},                  // by default "&" => "ja"
+		{map[string]string{"&": "or", "@": "the"}, "sv", "@ This & that", "the-this-or-that"}, // by default "&" => "och", "@" => "snabel a"
 		{map[string]string{"&": "or", "@": "the"}, "de", "@ This & that", "the-this-or-that"}, // by default "&" => "und", "@" => "an"
 	}
 
