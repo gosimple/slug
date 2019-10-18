@@ -80,6 +80,8 @@ func TestSlugMakeLang(t *testing.T) {
 		{"Ell", "ϊχώΩϋ", "ixwwu", false},
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc", true},
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicSUOIGC", false},
+		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuaghinoquu", true},
+		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuAGHINOQUU", false},
 		// & fun.
 		{"de", "This & that", "this-und-that", true},
 		{"en", "This & that", "this-and-that", true},
@@ -96,6 +98,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"swe", "This & that", "this-och-that", true},
 		{"swe", "This @ that", "this-snabel-a-that", true},
 		{"tr", "This & that", "this-ve-that", true},
+		{"kk", "This & that", "this-jane-that", true},
 		{"test", "This & that", "this-and-that", true}, // unknown lang, fallback to "en"
 		// Test defaultSub, when adding new lang copy/paste this line,
 		// it contain special characters.
@@ -106,6 +109,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"gr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"nl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"pl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"kk", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 	}
 
 	for index, smlt := range testCases {
@@ -131,6 +135,7 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 		{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"},                   // by default "&" => "und"
 		{map[string]string{"&": "or"}, "DEU", "This & that", "this-or-that"},                  // by default "&" => "und"
 		{map[string]string{"&": "or"}, "Fin", "This & that", "this-or-that"},                  // by default "&" => "ja"
+		{map[string]string{"&": "or"}, "kk", "This & that", "this-or-that"},                   // by default "&" => "jane"
 		{map[string]string{"&": "or", "@": "the"}, "sv", "@ This & that", "the-this-or-that"}, // by default "&" => "och", "@" => "snabel a"
 		{map[string]string{"&": "or", "@": "the"}, "de", "@ This & that", "the-this-or-that"}, // by default "&" => "und", "@" => "an"
 	}
