@@ -8,7 +8,7 @@ package slug
 func init() {
 	// Merge language subs with the default one
 	for _, sub := range []*map[rune]string{
-		&deSub, &enSub, &esSub, &fiSub, &grSub, &nlSub, &plSub, &svSub, &kkSub,
+		&deSub, &enSub, &esSub, &fiSub, &grSub, &kkSub, &nlSub, &plSub, &svSub,
 	} {
 		for key, value := range defaultSub {
 			(*sub)[key] = value
@@ -105,21 +105,14 @@ var kkSub = map[rune]string{
 	'&': "jane",
 	'ә': "a",
 	'ғ': "g",
-	'һ': "h",
-	'і': "i",
+	'қ': "q",
 	'ң': "n",
 	'ө': "o",
-	'қ': "q",
 	'ұ': "u",
-	'ү': "u",
-
 	'Ә': "A",
 	'Ғ': "G",
-	'Һ': "H",
-	'І': "I",
+	'Қ': "Q",
 	'Ң': "N",
 	'Ө': "O",
-	'Қ': "Q",
 	'Ұ': "U",
-	'Ү': "U",
 }
