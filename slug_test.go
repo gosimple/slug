@@ -80,6 +80,8 @@ func TestSlugMakeLang(t *testing.T) {
 		{"Ell", "ϊχώΩϋ", "ixwwu", false},
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc", true},
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicSUOIGC", false},
+		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuaghinoquu", true},
+		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuAGHINOQUU", false},
 		// & fun.
 		{"de", "This & that", "this-und-that", true},
 		{"en", "This & that", "this-and-that", true},
@@ -88,6 +90,8 @@ func TestSlugMakeLang(t *testing.T) {
 		{"gr", "This & that", "this-kai-that", true},
 		{"ell", "This & that", "this-kai-that", true},
 		{"Ell", "This & that", "this-kai-that", true},
+		{"kk", "This & that", "this-jane-that", true},
+		{"kk", "This @ that", "this-that", true},
 		{"nl", "This & that", "this-en-that", true},
 		{"pl", "This & that", "this-i-that", true},
 		{"pol", "This & that", "this-i-that", true},
@@ -104,6 +108,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"es", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"fi", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"gr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"kk", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"nl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"pl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 	}
@@ -131,6 +136,7 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 		{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"},                   // by default "&" => "und"
 		{map[string]string{"&": "or"}, "DEU", "This & that", "this-or-that"},                  // by default "&" => "und"
 		{map[string]string{"&": "or"}, "Fin", "This & that", "this-or-that"},                  // by default "&" => "ja"
+		{map[string]string{"&": "or"}, "kk", "This & that", "this-or-that"},                   // by default "&" => "jane"
 		{map[string]string{"&": "or", "@": "the"}, "sv", "@ This & that", "the-this-or-that"}, // by default "&" => "och", "@" => "snabel a"
 		{map[string]string{"&": "or", "@": "the"}, "de", "@ This & that", "the-this-or-that"}, // by default "&" => "und", "@" => "an"
 	}
