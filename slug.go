@@ -36,6 +36,26 @@ var (
 	regexpMultipleDashes     = regexp.MustCompile("-+")
 )
 
+// Slugger configures slug generation
+type Slugger struct {
+	// CustomSub stores custom substitution map
+	CustomSub map[string]string
+	// CustomRuneSub stores custom rune substitution map
+	CustomRuneSub map[rune]string
+
+	// MaxLength stores maximum slug length.
+	// It's smart so it will cat slug after full word.
+	// By default slugs aren't shortened.
+	// If MaxLength is smaller than length of the first word, then returned
+	// slug will contain only substring from the first word truncated
+	// after MaxLength.
+	MaxLength int
+
+	// Lowercase defines if the resulting slug is transformed to lowercase.
+	// Default is true.
+	Lowercase bool
+}
+
 //=============================================================================
 
 // Make returns slug generated from provided string. Will use "en" as language
@@ -47,12 +67,28 @@ func Make(s string) (slug string) {
 // MakeLang returns slug generated from provided string and will use provided
 // language for chars substitution.
 func MakeLang(s string, lang string) (slug string) {
+	return New().MakeLang(s, lang)
+}
+
+// New returns a Slugger initialized with the current global defaults
+func New() Slugger {
+	return Slugger{
+		CustomSub:     CustomSub,
+		CustomRuneSub: CustomRuneSub,
+		MaxLength:     MaxLength,
+		Lowercase:     Lowercase,
+	}
+}
+
+// MakeLang returns slug generated from provided string and will use provided
+// language for chars substitution.
+func (sl Slugger) MakeLang(s string, lang string) (slug string) {
 	slug = strings.TrimSpace(s)
 
 	// Custom substitutions
 	// Always substitute runes first
-	slug = SubstituteRune(slug, CustomRuneSub)
-	slug = Substitute(slug, CustomSub)
+	slug = SubstituteRune(slug, sl.CustomRuneSub)
+	slug = Substitute(slug, sl.CustomSub)
 
 	// Process string with selected substitution language.
 	// Catch ISO 3166-1, ISO 639-1:2002 and ISO 639-3:2007.
@@ -84,7 +120,7 @@ func MakeLang(s string, lang string) (slug string) {
 	// Process all non ASCII symbols
 	slug = unidecode.Unidecode(slug)
 
-	if Lowercase {
+	if sl.Lowercase {
 		slug = strings.ToLower(slug)
 	}
 
@@ -93,8 +129,8 @@ func MakeLang(s string, lang string) (slug string) {
 	slug = regexpMultipleDashes.ReplaceAllString(slug, "-")
 	slug = strings.Trim(slug, "-_")
 
-	if MaxLength > 0 {
-		slug = smartTruncate(slug)
+	if sl.MaxLength > 0 {
+		slug = smartTruncate(slug, sl.MaxLength)
 	}
 
 	return slug
@@ -131,20 +167,20 @@ func SubstituteRune(s string, sub map[rune]string) string {
 	return buf.String()
 }
 
-func smartTruncate(text string) string {
-	if len(text) < MaxLength {
+func smartTruncate(text string, maxLength int) string {
+	if len(text) < maxLength {
 		return text
 	}
 
 	var truncated string
 	words := strings.SplitAfter(text, "-")
-	// If MaxLength is smaller than length of the first word return word
-	// truncated after MaxLength.
-	if len(words[0]) > MaxLength {
-		return words[0][:MaxLength]
+	// If maxLength is smaller than length of the first word return word
+	// truncated after maxLength.
+	if len(words[0]) > maxLength {
+		return words[0][:maxLength]
 	}
 	for _, word := range words {
-		if len(truncated)+len(word)-1 <= MaxLength {
+		if len(truncated)+len(word)-1 <= maxLength {
 			truncated = truncated + word
 		} else {
 			break
@@ -159,8 +195,17 @@ func smartTruncate(text string) string {
 // It should be in range of the MaxLength var if specified.
 // All output from slug.Make(text) should pass this test.
 func IsSlug(text string) bool {
+	return Slugger{MaxLength: MaxLength}.IsSlug(text)
+}
+
+// IsSlug returns True if provided text does not contain white characters,
+// punctuation, all letters are lower case and only from ASCII range.
+// It could contain `-` and `_` but not at the beginning or end of the text.
+// It should be in range of the MaxLength var if specified.
+// All output from slug.Make(text) should pass this test.
+func (sl Slugger) IsSlug(text string) bool {
 	if text == "" ||
-		(MaxLength > 0 && len(text) > MaxLength) ||
+		(sl.MaxLength > 0 && len(text) > sl.MaxLength) ||
 		text[0] == '-' || text[0] == '_' ||
 		text[len(text)-1] == '-' || text[len(text)-1] == '_' {
 		return false

@@ -38,6 +38,23 @@ Example:
 		}
 		textSub := slug.Make("water is hot")
 		fmt.Println(textSub) // Will print: "sand-is-hot"
+
+		// as above but goroutine safe, without race hazard
+
+		slugger := slug.New() // captures current global defaults
+
+		enText := slugger.MakeLang("This & that", "en")
+		fmt.Println(enText) // Will print: "this-and-that"
+
+		slugger.Lowercase = false // Keep uppercase characters
+		deUppercaseText := slugger.MakeLang("Diese & Dass", "de")
+		fmt.Println(deUppercaseText) // Will print: "Diese-und-Dass"
+
+		slugger.CustomSub = map[string]string{
+			"water": "sand",
+		}
+		textSub := slugger.Make("water is hot")
+		fmt.Println(textSub) // Will print: "sand-is-hot"
 	}
 
 Requests or bugs?

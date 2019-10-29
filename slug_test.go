@@ -403,7 +403,7 @@ func BenchmarkSmartTruncateShort(b *testing.B) {
 	b.ReportAllocs()
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		smartTruncate(shortStr)
+		smartTruncate(shortStr, MaxLength)
 	}
 }
 
@@ -428,7 +428,7 @@ func BenchmarkSmartTruncateLong(b *testing.B) {
 	b.ReportAllocs()
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		smartTruncate(longStr)
+		smartTruncate(longStr, MaxLength)
 	}
 }
 
