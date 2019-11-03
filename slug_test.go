@@ -6,6 +6,7 @@
 package slug
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -52,12 +53,16 @@ func TestSlugMake(t *testing.T) {
 	}
 
 	for index, st := range testCases {
-		got := Make(st.in)
-		if got != st.want {
-			t.Errorf(
-				"%d. Make(%#v) = %#v; want %#v",
-				index, st.in, got, st.want)
-		}
+		t.Run(fmt.Sprintf("%d", index), func(t *testing.T) {
+			//t.Parallel()
+			st := st
+			got := Make(st.in)
+			if got != st.want {
+				t.Errorf(
+					"%d. Make(%#v) = %#v; want %#v",
+					index, st.in, got, st.want)
+			}
+		})
 	}
 }
 
@@ -116,13 +121,17 @@ func TestSlugMakeLang(t *testing.T) {
 	}
 
 	for index, smlt := range testCases {
-		Lowercase = smlt.lowercase
-		got := MakeLang(smlt.in, smlt.lang)
-		if got != smlt.want {
-			t.Errorf(
-				"%d. MakeLang(%#v, %#v) = %#v; want %#v",
-				index, smlt.in, smlt.lang, got, smlt.want)
-		}
+		t.Run(fmt.Sprintf("%d", index), func(t *testing.T) {
+			//t.Parallel()
+			smlt := smlt // closure
+			Lowercase = smlt.lowercase
+			got := MakeLang(smlt.in, smlt.lang)
+			if got != smlt.want {
+				t.Errorf(
+					"%d. MakeLang(%#v, %#v) = %#v; want %#v",
+					index, smlt.in, smlt.lang, got, smlt.want)
+			}
+		})
 	}
 }
 
@@ -144,14 +153,18 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 	}
 
 	for index, smust := range testCases {
-		CustomSub = smust.cSub
-		got := MakeLang(smust.in, smust.lang)
-		if got != smust.want {
-			t.Errorf(
-				"%d. %#v; MakeLang(%#v, %#v) = %#v; want %#v",
-				index, smust.cSub, smust.in, smust.lang,
-				got, smust.want)
-		}
+		t.Run(fmt.Sprintf("%d", index), func(t *testing.T) {
+			//t.Parallel()
+			smust := smust
+			CustomSub = smust.cSub
+			got := MakeLang(smust.in, smust.lang)
+			if got != smust.want {
+				t.Errorf(
+					"%d. %#v; MakeLang(%#v, %#v) = %#v; want %#v",
+					index, smust.cSub, smust.in, smust.lang,
+					got, smust.want)
+			}
+		})
 	}
 }
 
@@ -170,15 +183,19 @@ func TestSlugMakeSubstituteOrderLang(t *testing.T) {
 	}
 
 	for index, smsot := range testCases {
-		CustomRuneSub = smsot.rSub
-		CustomSub = smsot.sSub
-		got := Make(smsot.in)
-		if got != smsot.want {
-			t.Errorf(
-				"%d. %#v; %#v; Make(%#v) = %#v; want %#v",
-				index, smsot.rSub, smsot.sSub, smsot.in,
-				got, smsot.want)
-		}
+		t.Run(fmt.Sprintf("%d", index), func(t *testing.T) {
+			//t.Parallel()
+			smsot := smsot
+			CustomRuneSub = smsot.rSub
+			CustomSub = smsot.sSub
+			got := Make(smsot.in)
+			if got != smsot.want {
+				t.Errorf(
+					"%d. %#v; %#v; Make(%#v) = %#v; want %#v",
+					index, smsot.rSub, smsot.sSub, smsot.in,
+					got, smsot.want)
+			}
+		})
 	}
 }
 
@@ -195,12 +212,16 @@ func TestSubstituteLang(t *testing.T) {
 	}
 
 	for index, sst := range testCases {
-		got := Substitute(sst.in, sst.cSub)
-		if got != sst.want {
-			t.Errorf(
-				"%d. Substitute(%#v, %#v) = %#v; want %#v",
-				index, sst.in, sst.cSub, got, sst.want)
-		}
+		t.Run(fmt.Sprintf("%d", index), func(t *testing.T) {
+			//t.Parallel()
+			sst := sst
+			got := Substitute(sst.in, sst.cSub)
+			if got != sst.want {
+				t.Errorf(
+					"%d. Substitute(%#v, %#v) = %#v; want %#v",
+					index, sst.in, sst.cSub, got, sst.want)
+			}
+		})
 	}
 }
 
@@ -217,12 +238,16 @@ func TestSubstituteRuneLang(t *testing.T) {
 	}
 
 	for index, ssrt := range testCases {
-		got := SubstituteRune(ssrt.in, ssrt.cSub)
-		if got != ssrt.want {
-			t.Errorf(
-				"%d. SubstituteRune(%#v, %#v) = %#v; want %#v",
-				index, ssrt.in, ssrt.cSub, got, ssrt.want)
-		}
+		t.Run(fmt.Sprintf("%d", index), func(t *testing.T) {
+			//t.Parallel()
+			ssrt := ssrt
+			got := SubstituteRune(ssrt.in, ssrt.cSub)
+			if got != ssrt.want {
+				t.Errorf(
+					"%d. SubstituteRune(%#v, %#v) = %#v; want %#v",
+					index, ssrt.in, ssrt.cSub, got, ssrt.want)
+			}
+		})
 	}
 }
 
@@ -241,13 +266,17 @@ func TestSlugMakeSmartTruncate(t *testing.T) {
 	}
 
 	for index, smstt := range testCases {
-		MaxLength = smstt.maxLength
-		got := Make(smstt.in)
-		if got != smstt.want {
-			t.Errorf(
-				"%d. MaxLength = %v; Make(%#v) = %#v; want %#v",
-				index, smstt.maxLength, smstt.in, got, smstt.want)
-		}
+		t.Run(fmt.Sprintf("%d", index), func(t *testing.T) {
+			//t.Parallel()
+			smstt := smstt
+			MaxLength = smstt.maxLength
+			got := Make(smstt.in)
+			if got != smstt.want {
+				t.Errorf(
+					"%d. MaxLength = %v; Make(%#v) = %#v; want %#v",
+					index, smstt.maxLength, smstt.in, got, smstt.want)
+			}
+		})
 	}
 }
 
@@ -276,8 +305,10 @@ func TestIsSlug(t *testing.T) {
 		{"outside ASCII –", args{"2000–2013"}, false},
 		{"smile ☺", args{"smile ☺"}, false},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
+	for index, tt := range tests {
+		t.Run(fmt.Sprintf("%d", index), func(t *testing.T) {
+			//t.Parallel()
+			tt := tt
 			if got := IsSlug(tt.args.text); got != tt.want {
 				t.Errorf("IsSlug() = %v, want %v", got, tt.want)
 			}
