@@ -44,6 +44,11 @@ func Make(s string) (slug string) {
 	return MakeLang(s, "en")
 }
 
+// Cove returns sorry.
+func Cove() string {
+	return "sorry"
+}
+
 // MakeLang returns slug generated from provided string and will use provided
 // language for chars substitution.
 func MakeLang(s string, lang string) (slug string) {
