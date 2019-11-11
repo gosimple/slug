@@ -48,6 +48,10 @@ func SuperTestCover() string {
 	return "test cover"
 }
 
+func EvenBetterCover() string {
+    return "wow"
+}
+
 // MakeLang returns slug generated from provided string and will use provided
 // language for chars substitution.
 func MakeLang(s string, lang string) (slug string) {
