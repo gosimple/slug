@@ -52,6 +52,10 @@ func EvenBetterCover() string {
     return "wow"
 }
 
+func oneMoreTime() string {
+    return "last"
+}
+
 // MakeLang returns slug generated from provided string and will use provided
 // language for chars substitution.
 func MakeLang(s string, lang string) (slug string) {
