@@ -49,7 +49,7 @@ func SuperTestCover() string {
 }
 
 func EvenBetterCover() string {
-    return "wow"
+    return "almost"
 }
 
 func oneMoreTime() string {
