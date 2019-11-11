@@ -45,7 +45,7 @@ func Make(s string) (slug string) {
 }
 
 func SuperTestCover() string {
-	return "test cover"
+	return "test"
 }
 
 func EvenBetterCover() string {
