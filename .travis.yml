@@ -13,8 +13,12 @@ before_script:
   - go get -v golang.org/x/lint/golint
   - go get -v honnef.co/go/tools/cmd/staticcheck
   - go vet ./...
+
 script:
   # run all our tests with race detector
-  - go test -v -race ./...
+  - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
   # "go vet on steroids" + linter
   - staticcheck ./...
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
