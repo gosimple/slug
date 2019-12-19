@@ -95,6 +95,15 @@ var nlSub = map[rune]string{
 var plSub = map[rune]string{
 	'&': "i",
 	'@': "na",
+	'ą': "a",
+	'ć': "c",
+	'ę': "e",
+	'ł': "l", 
+	'ń': "n", 
+	'ó': "o", 
+	'ś': "s", 
+	'ź': "z", 
+	'ż': "z",
 }
 
 var svSub = map[rune]string{
