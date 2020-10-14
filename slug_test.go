@@ -99,6 +99,12 @@ func TestSlugMakeLang(t *testing.T) {
 		{"sv", "This @ that", "this-snabel-a-that", true},
 		{"swe", "This & that", "this-och-that", true},
 		{"swe", "This @ that", "this-snabel-a-that", true},
+		{"nb", "Ærlig, Østen, Åse", "aerlig-oesten-aase", true},
+		{"nb", "This & that", "this-og-that", true},
+		{"nb", "This @ that", "this-at-that", true},
+		{"nn", "Ærlig, Østen, Åse", "aerlig-oesten-aase", true},
+		{"nn", "This & that", "this-og-that", true},
+		{"nn", "This @ that", "this-at-that", true},
 		{"tr", "This & that", "this-ve-that", true},
 		{"test", "This & that", "this-and-that", true}, // unknown lang, fallback to "en"
 		// Test defaultSub, when adding new lang copy/paste this line,
@@ -112,7 +118,8 @@ func TestSlugMakeLang(t *testing.T) {
 		{"nl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"pl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"sv", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
-		{"tr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"nb", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"nn", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 	}
 
 	for index, smlt := range testCases {
