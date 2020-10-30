@@ -294,37 +294,42 @@ func TestIsSlug(t *testing.T) {
 }
 
 func BenchmarkMakeShortAscii(b *testing.B) {
+	slug := New()
 	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
-		Make("Hello world")
+		slug.Make("Hello world")
 	}
 }
 
 func BenchmarkMakeShort(b *testing.B) {
+	slug := New()
 	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
-		Make("хелло ворлд")
+		slug.Make("хелло ворлд")
 	}
 }
 
 func BenchmarkMakeShortSymbols(b *testing.B) {
+	slug := New()
 	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
-		Make("·/,:;`˜'\" &€￡￥")
+		slug.Make("·/,:;`˜'\" &€￡￥")
 	}
 }
 
 func BenchmarkMakeMediumAscii(b *testing.B) {
+	slug := New()
 	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
-		Make("ABCDE FGHIJ KLMNO PQRST UWXYZ ABCDE FGHIJ KLMNO PQRST UWXYZ ABCDE")
+		slug.Make("ABCDE FGHIJ KLMNO PQRST UWXYZ ABCDE FGHIJ KLMNO PQRST UWXYZ ABCDE")
 	}
 }
 
 func BenchmarkMakeMedium(b *testing.B) {
+	slug := New()
 	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
-		Make("ｦｧｨｩｪ ｫｬｭｮｯ ｰｱｲｳｴ ｵｶｷｸｹ ｺｻｼｽｾ ｿﾀﾁﾂﾃ ﾄﾅﾆﾇﾈ ﾉﾊﾋﾌﾍ ﾎﾏﾐﾑﾒ ﾓﾔﾕﾖﾗ ﾘﾙﾚﾛﾜ")
+		slug.Make("ｦｧｨｩｪ ｫｬｭｮｯ ｰｱｲｳｴ ｵｶｷｸｹ ｺｻｼｽｾ ｿﾀﾁﾂﾃ ﾄﾅﾆﾇﾈ ﾉﾊﾋﾌﾍ ﾎﾏﾐﾑﾒ ﾓﾔﾕﾖﾗ ﾘﾙﾚﾛﾜ")
 	}
 }
 
@@ -344,11 +349,12 @@ func BenchmarkMakeLongAscii(b *testing.B) {
 		"nisl. Etiam varius imperdiet placerat. Aliquam euismod lacus arcu, " +
 		"ultrices hendrerit est pellentesque vel. Aliquam sit amet laoreet leo. " +
 		"Integer eros libero, mollis sed posuere."
+	slug := New()
 
 	b.ReportAllocs()
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		Make(longStr)
+		slug.Make(longStr)
 	}
 }
 
@@ -399,11 +405,12 @@ func BenchmarkSubstituteRuneLong(b *testing.B) {
 func BenchmarkSmartTruncateShort(b *testing.B) {
 	shortStr := "Hello-world"
 	MaxLength = 8
+	slug := New()
 
 	b.ReportAllocs()
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		smartTruncate(shortStr)
+		slug.smartTruncate(shortStr)
 	}
 }
 
@@ -424,11 +431,12 @@ func BenchmarkSmartTruncateLong(b *testing.B) {
 		"ultrices-hendrerit-est-pellentesque-vel.-Aliquam-sit-amet-laoreet-leo.-" +
 		"Integer-eros-libero,-mollis-sed-posuere."
 	MaxLength = 256
+	slug := New()
 
 	b.ReportAllocs()
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		smartTruncate(longStr)
+		slug.smartTruncate(longStr)
 	}
 }
 
