@@ -61,6 +61,17 @@ func TestSlugMake(t *testing.T) {
 	}
 }
 
+func TestSlugMakeWithStruct(t *testing.T) {
+	slug := New()
+	in := "DOBROSLAWZYBORT"
+	want := "dobroslawzybort"
+	got := slug.Make(in)
+
+	if got != want {
+		t.Errorf("slug.Make(%#v) = %#v; want %#v", in, got, want)
+	}
+}
+
 func TestSlugMakeLang(t *testing.T) {
 	testCases := []struct {
 		lang      string
