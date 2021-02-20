@@ -10,7 +10,7 @@ func init() {
 	// TODO: Find better way so all langs are merged automatically and better
 	// tested.
 	for _, sub := range []*map[rune]string{
-		&deSub, &enSub, &esSub, &fiSub, &grSub, &kkSub, &nlSub, &plSub, &svSub, &trSub,
+		&deSub, &enSub, &esSub, &fiSub, &grSub, &kkSub, &nlSub, &plSub, &svSub, &slSub, &trSub,
 	} {
 		for key, value := range defaultSub {
 			(*sub)[key] = value
@@ -100,6 +100,12 @@ var plSub = map[rune]string{
 var svSub = map[rune]string{
 	'&': "och",
 	'@': "snabel a",
+}
+
+var slSub = map[rune]string{
+	'&': "in",
+	'Đ': "DZ",
+	'đ': "dz",
 }
 
 var trSub = map[rune]string{
