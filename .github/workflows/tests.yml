@@ -26,10 +26,10 @@ jobs:
       matrix:
         go-version: [1.16.x, 1.x]
     steps:
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-        uses: WillAbides/setup-go-faster@v1
+      - uses: WillAbides/setup-go-faster@v1
         with:
           go-version: ${{ matrix.go-version }}
 
