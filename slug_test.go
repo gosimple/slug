@@ -42,6 +42,7 @@ func TestSlugMake(t *testing.T) {
 		{"Æ", "ae"},
 		{"Ich heiße", "ich-heisse"},
 		{"𐀀", ""}, // Bug #53
+		{"% 5 @ 4 $ 3 / 2 & 1 & 2 # 3 @ 4 _ 5", "5-at-4-3-2-and-1-and-2-3-at-4-_-5"},
 
 		{"This & that", "this-and-that"},
 		{"fácil €", "facil-eu"},
@@ -121,12 +122,12 @@ func TestSlugMakeLang(t *testing.T) {
 		{"fi", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"gr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"kk", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
-		{"nl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
-		{"pl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
-		{"sv", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"nb", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"nn", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"nl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"pl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"sl", "1\"2'3’4-5–6—7―8", "1234-5-6-7-8", true},
+		{"sv", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"tr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 	}
 
@@ -155,8 +156,8 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 		{map[string]string{"&": "or"}, "Fin", "This & that", "this-or-that"},                  // by default "&" => "ja"
 		{map[string]string{"&": "or"}, "fr", "This & that", "this-or-that"},                   // by default "&" => "ja"
 		{map[string]string{"&": "or"}, "kk", "This & that", "this-or-that"},                   // by default "&" => "jane"
-		{map[string]string{"&": "or", "@": "the"}, "sv", "@ This & that", "the-this-or-that"}, // by default "&" => "och", "@" => "snabel a"
 		{map[string]string{"&": "or", "@": "the"}, "de", "@ This & that", "the-this-or-that"}, // by default "&" => "und", "@" => "an"
+		{map[string]string{"&": "or", "@": "the"}, "sv", "@ This & that", "the-this-or-that"}, // by default "&" => "och", "@" => "snabel a"
 	}
 
 	for index, smust := range testCases {
