@@ -11,7 +11,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/rainycape/unidecode"
+	"github.com/gosimple/unidecode"
 )
 
 var (

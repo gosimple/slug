@@ -41,6 +41,7 @@ func TestSlugMake(t *testing.T) {
 		{"-test-slug-", "test-slug"},
 		{"Æ", "ae"},
 		{"Ich heiße", "ich-heisse"},
+		{"𐀀", ""}, // Bug #53
 
 		{"This & that", "this-and-that"},
 		{"fácil €", "facil-eu"},
@@ -152,7 +153,7 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 		{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"},                   // by default "&" => "und"
 		{map[string]string{"&": "or"}, "DEU", "This & that", "this-or-that"},                  // by default "&" => "und"
 		{map[string]string{"&": "or"}, "Fin", "This & that", "this-or-that"},                  // by default "&" => "ja"
-		{map[string]string{"&": "or"}, "fr", "This & that", "this-or-that"},                  // by default "&" => "ja"
+		{map[string]string{"&": "or"}, "fr", "This & that", "this-or-that"},                   // by default "&" => "ja"
 		{map[string]string{"&": "or"}, "kk", "This & that", "this-or-that"},                   // by default "&" => "jane"
 		{map[string]string{"&": "or", "@": "the"}, "sv", "@ This & that", "the-this-or-that"}, // by default "&" => "och", "@" => "snabel a"
 		{map[string]string{"&": "or", "@": "the"}, "de", "@ This & that", "the-this-or-that"}, // by default "&" => "und", "@" => "an"
