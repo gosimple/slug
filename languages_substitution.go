@@ -10,7 +10,7 @@ func init() {
 	// TODO: Find better way so all langs are merged automatically and better
 	// tested.
 	for _, sub := range []*map[rune]string{
-		&deSub, &enSub, &esSub, &fiSub, &grSub, &kkSub, &nlSub, &plSub, &svSub, &slSub, &trSub,
+		&deSub, &enSub, &esSub, &fiSub, &grSub, &kkSub, &nlSub, &plSub, &svSub, &slSub, &trSub, &nbSub, &nnSub,
 	} {
 		for key, value := range defaultSub {
 			(*sub)[key] = value
@@ -86,6 +86,20 @@ var kkSub = map[rune]string{
 	'Ө': "O",
 	'Ұ': "U",
 }
+
+var nbSub = map[rune]string{
+	'&': "og",
+	'@': "at",
+	'æ': "ae",
+	'ø': "oe",
+	'å': "aa",
+	'Æ': "Ae",
+	'Ø': "Oe",
+	'Å': "Aa",
+}
+
+// Norwegian Nynorsk has the same rules
+var nnSub = nbSub
 
 var nlSub = map[rune]string{
 	'&': "en",
