@@ -49,6 +49,7 @@ func TestSlugMake(t *testing.T) {
 		{"\"C'est déjà l’été.\"", "cest-deja-lete"},
 		{"jaja---lol-méméméoo--a", "jaja-lol-mememeoo-a"},
 		{"影師", "ying-shi"},
+		{"Đanković & Kožušček", "dankovic-and-kozuscek"},
 	}
 
 	for index, st := range testCases {
@@ -106,6 +107,8 @@ func TestSlugMakeLang(t *testing.T) {
 		{"nn", "This & that", "this-og-that", true},
 		{"nn", "This @ that", "this-at-that", true},
 		{"tr", "This & that", "this-ve-that", true},
+		{"sl", "đanković & Kožušček", "dzankovic-in-kozuscek", true},
+		{"sl", "ĐankoVIĆ & KOŽUŠČEK", "DZankoVIC-in-KOZUSCEK", false},
 		{"test", "This & that", "this-and-that", true}, // unknown lang, fallback to "en"
 		// Test defaultSub, when adding new lang copy/paste this line,
 		// it contain special characters.
@@ -120,6 +123,8 @@ func TestSlugMakeLang(t *testing.T) {
 		{"sv", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"nb", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"nn", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"sl", "1\"2'3’4-5–6—7―8", "1234-5-6-7-8", true},
+		{"tr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 	}
 
 	for index, smlt := range testCases {
