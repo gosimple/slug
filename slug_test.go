@@ -23,16 +23,18 @@ func TestSlugMake(t *testing.T) {
 		{"Ala ma 6 kotów.", "ala-ma-6-kotow"},
 
 		{"áÁàÀãÃâÂäÄąĄą̊Ą̊", "aaaaaaaaaaaaaa"},
-		{"ćĆĉĈçÇ", "cccccc"},
-		{"éÉèÈẽẼêÊëËęĘ", "eeeeeeeeeeee"},
+		{"ćĆĉĈçÇčČ", "cccccccc"},
+		{"éÉèÈẽẼêÊëËęĘěĚ", "eeeeeeeeeeeeee"},
 		{"íÍìÌĩĨîÎïÏįĮ", "iiiiiiiiiiii"},
 		{"łŁ", "ll"},
 		{"ńŃ", "nn"},
 		{"óÓòÒõÕôÔöÖǫǪǭǬø", "ooooooooooooooo"},
-		{"śŚ", "ss"},
-		{"úÚùÙũŨûÛüÜųŲ", "uuuuuuuuuuuu"},
-		{"y̨Y̨", "yy"},
-		{"źŹżŹ", "zzzz"},
+		{"śŚšŠ", "ssss"},
+		{"řŘ", "rr"},
+		{"ťŤ", "tt"},
+		{"úÚùÙũŨûÛüÜųŲůŮ", "uuuuuuuuuuuuuu"},
+		{"y̨Y̨ýÝ", "yyyy"},
+		{"źŹżŹžŽ", "zzzzzz"},
 		{"·/,:;`˜'\"", ""},
 		{"2000–2013", "2000-2013"},
 		{"style—not", "style-not"},
@@ -71,6 +73,10 @@ func TestSlugMakeLang(t *testing.T) {
 		want      string
 		lowercase bool
 	}{
+		{"cs", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontescrzyaieuuont", true},
+		{"cs", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontESCRZYAIEUUONT", false},
+		{"ces", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontescrzyaieuuont", true},
+		{"ces", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontESCRZYAIEUUONT", false},
 		{"de", "Wir mögen Bücher & Käse", "wir-moegen-buecher-und-kaese", true},
 		{"de", "Wir mögen Bücher & Käse", "Wir-moegen-Buecher-und-Kaese", false},
 		{"de", "Äpfel Über Österreich", "aepfel-ueber-oesterreich", true},
@@ -86,6 +92,14 @@ func TestSlugMakeLang(t *testing.T) {
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuaghinoquu", true},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuAGHINOQUU", false},
 		// & fun.
+		{"cs", "Toto & Tamto", "toto-a-tamto", true},
+		{"cs", "Toto & Tamto", "Toto-a-Tamto", false},
+		{"cs", "Toto @ Tamto", "toto-apostrof-tamto", true},
+		{"cs", "Toto @ Tamto", "Toto-apostrof-Tamto", false},
+		{"ces", "Toto & Tamto", "toto-a-tamto", true},
+		{"ces", "Toto & Tamto", "Toto-a-Tamto", false},
+		{"ces", "Toto @ Tamto", "toto-apostrof-tamto", true},
+		{"ces", "Toto @ Tamto", "Toto-apostrof-Tamto", false},
 		{"de", "This & that", "this-und-that", true},
 		{"en", "This & that", "this-and-that", true},
 		{"es", "This & that", "this-y-that", true},
@@ -116,6 +130,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"test", "This & that", "this-and-that", true}, // unknown lang, fallback to "en"
 		// Test defaultSub, when adding new lang copy/paste this line,
 		// it contain special characters.
+		{"cs", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"de", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"en", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"es", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
@@ -151,6 +166,8 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 	}{
 		{map[string]string{"'": " "}, "en", "That's great", "that-s-great"},
 		{map[string]string{"&": "or"}, "en", "This & that", "this-or-that"},                   // by default "&" => "and"
+		{map[string]string{"&": "or"}, "cs", "This & that", "this-or-that"},                   // by default "&" => "a"
+		{map[string]string{"&": "or"}, "ces", "This & that", "this-or-that"},                  // by default "&" => "a"
 		{map[string]string{"&": "or"}, "de", "This & that", "this-or-that"},                   // by default "&" => "und"
 		{map[string]string{"&": "or"}, "DEU", "This & that", "this-or-that"},                  // by default "&" => "und"
 		{map[string]string{"&": "or"}, "Fin", "This & that", "this-or-that"},                  // by default "&" => "ja"
