@@ -44,7 +44,7 @@ var defaultSub = map[rune]string{
 
 var csSub = map[rune]string{
 	'&': "a",
-	'@': "apostrof",
+	'@': "zavinac",
 }
 
 var deSub = map[rune]string{
