@@ -10,6 +10,7 @@ func init() {
 	// TODO: Find better way so all langs are merged automatically and better
 	// tested.
 	for _, sub := range []*map[rune]string{
+		&csSub,
 		&deSub,
 		&enSub,
 		&esSub,
@@ -39,6 +40,11 @@ var defaultSub = map[rune]string{
 	'–':  "-", // en dash
 	'—':  "-", // em dash
 	'―':  "-", // horizontal bar
+}
+
+var csSub = map[rune]string{
+	'&': "a",
+	'@': "zavinac",
 }
 
 var deSub = map[rune]string{
