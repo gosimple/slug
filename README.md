@@ -56,11 +56,11 @@ go get -u github.com/gosimple/slug
 ## Benchmarking
 
 ```shell
-go get -u golang.org/x/perf/cmd/benchstat
-
-go test -run=NONE -bench=. ./... > old.txt
+go test -run=NONE -bench=. -benchmem -count=6 ./... > old.txt
 # make changes
-go test -run=NONE -bench=. ./... > new.txt
+go test -run=NONE -bench=. -benchmem -count=6 ./... > new.txt
+
+go install golang.org/x/perf/cmd/benchstat@latest
 
 benchstat old.txt new.txt
 ```
