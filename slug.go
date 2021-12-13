@@ -73,6 +73,8 @@ func MakeLang(s string, lang string) (slug string) {
 		slug = SubstituteRune(slug, grSub)
 	case "hu", "hun":
 		slug = SubstituteRune(slug, huSub)
+	case "id", "idn", "ind":
+		slug = SubstituteRune(slug, idSub)
 	case "kz", "kk", "kaz":
 		slug = SubstituteRune(slug, kkSub)
 	case "nb", "nob":
