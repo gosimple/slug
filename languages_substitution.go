@@ -116,6 +116,7 @@ var huSub = map[rune]string{
 	'Ü': "U",
 	'ű': "u",
 	'Ű': "U",
+}
 
 var idSub = map[rune]string{
 	'&': "dan",
