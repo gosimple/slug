@@ -38,21 +38,40 @@ var (
 
 //=============================================================================
 
+// Slug a structure containing local settings. Using it allows for concurrent slugging
+// with different settings.
+type Slug struct {
+	CustomSub     map[string]string
+	CustomRuneSub map[rune]string
+	MaxLength     int
+	Lowercase     bool
+}
+
+// New create a new Slug structure using the default settings.
+func New() *Slug {
+	return &Slug{
+		CustomSub:     cloneStringMap(CustomSub),
+		CustomRuneSub: cloneRuneMap(CustomRuneSub),
+		MaxLength:     MaxLength,
+		Lowercase:     Lowercase,
+	}
+}
+
 // Make returns slug generated from provided string. Will use "en" as language
 // substitution.
-func Make(s string) (slug string) {
-	return MakeLang(s, "en")
+func (sl *Slug) Make(s string) (slug string) {
+	return sl.MakeLang(s, "en")
 }
 
 // MakeLang returns slug generated from provided string and will use provided
 // language for chars substitution.
-func MakeLang(s string, lang string) (slug string) {
+func (sl *Slug) MakeLang(s string, lang string) (slug string) {
 	slug = strings.TrimSpace(s)
 
 	// Custom substitutions
 	// Always substitute runes first
-	slug = SubstituteRune(slug, CustomRuneSub)
-	slug = Substitute(slug, CustomSub)
+	slug = SubstituteRune(slug, sl.CustomRuneSub)
+	slug = Substitute(slug, sl.CustomSub)
 
 	// Process string with selected substitution language.
 	// Catch ISO 3166-1, ISO 639-1:2002 and ISO 639-3:2007.
@@ -98,7 +117,7 @@ func MakeLang(s string, lang string) (slug string) {
 	// Process all non ASCII symbols
 	slug = unidecode.Unidecode(slug)
 
-	if Lowercase {
+	if sl.Lowercase {
 		slug = strings.ToLower(slug)
 	}
 
@@ -107,11 +126,49 @@ func MakeLang(s string, lang string) (slug string) {
 	slug = regexpMultipleDashes.ReplaceAllString(slug, "-")
 	slug = strings.Trim(slug, "-_")
 
-	if MaxLength > 0 {
-		slug = smartTruncate(slug)
+	if sl.MaxLength > 0 {
+		slug = sl.smartTruncate(slug)
 	}
 
 	return slug
+}
+
+func (sl *Slug) smartTruncate(text string) string {
+	if len(text) < sl.MaxLength {
+		return text
+	}
+
+	var truncated string
+	words := strings.SplitAfter(text, "-")
+	// If MaxLength is smaller than length of the first word return word
+	// truncated after MaxLength.
+	if len(words[0]) > sl.MaxLength {
+		return words[0][:sl.MaxLength]
+	}
+	for _, word := range words {
+		if len(truncated)+len(word)-1 <= sl.MaxLength {
+			truncated = truncated + word
+		} else {
+			break
+		}
+	}
+	return strings.Trim(truncated, "-")
+}
+
+//=============================================================================
+
+// Make returns slug generated from provided string. Will use "en" as language
+// substitution.
+// Global settings will be used.
+func Make(s string) (slug string) {
+	return MakeLang(s, "en")
+}
+
+// MakeLang returns slug generated from provided string and will use provided
+// language for chars substitution.
+// Global settings will be used.
+func MakeLang(s string, lang string) (slug string) {
+	return New().MakeLang(s, lang)
 }
 
 // Substitute returns string with superseded all substrings from
@@ -145,28 +202,6 @@ func SubstituteRune(s string, sub map[rune]string) string {
 	return buf.String()
 }
 
-func smartTruncate(text string) string {
-	if len(text) < MaxLength {
-		return text
-	}
-
-	var truncated string
-	words := strings.SplitAfter(text, "-")
-	// If MaxLength is smaller than length of the first word return word
-	// truncated after MaxLength.
-	if len(words[0]) > MaxLength {
-		return words[0][:MaxLength]
-	}
-	for _, word := range words {
-		if len(truncated)+len(word)-1 <= MaxLength {
-			truncated = truncated + word
-		} else {
-			break
-		}
-	}
-	return strings.Trim(truncated, "-")
-}
-
 // IsSlug returns True if provided text does not contain white characters,
 // punctuation, all letters are lower case and only from ASCII range.
 // It could contain `-` and `_` but not at the beginning or end of the text.
@@ -185,4 +220,20 @@ func IsSlug(text string) bool {
 		}
 	}
 	return true
+}
+
+func cloneStringMap(m map[string]string) map[string]string {
+	new := make(map[string]string, len(m))
+	for k, v := range m {
+		new[k] = v
+	}
+	return new
+}
+
+func cloneRuneMap(m map[rune]string) map[rune]string {
+	new := make(map[rune]string, len(m))
+	for k, v := range m {
+		new[k] = v
+	}
+	return new
 }
