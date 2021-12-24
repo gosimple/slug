@@ -94,6 +94,8 @@ func TestSlugMakeLang(t *testing.T) {
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicSUOIGC", false},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuaghinoquu", true},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuAGHINOQUU", false},
+		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "abvgdezhziyklmnoprstufhtschshshayyuyaabvgdezhziyklmnoprstufhtschshshtayyuya", true},
+		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "ABVGDEZhZIYKLMNOPRSTUFHTsChShShAYYuYaabvgdezhziyklmnoprstufhtschshshtayyuya", false},
 		// & fun.
 		{"cs", "Toto & Tamto", "toto-a-tamto", true},
 		{"cs", "Toto & Tamto", "Toto-a-Tamto", false},
@@ -129,6 +131,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"nn", "This & that", "this-og-that", true},
 		{"nn", "This @ that", "this-at-that", true},
 		{"tr", "This & that", "this-ve-that", true},
+		{"bg", "Това и онова", "tova-i-onova", true},
 		{"sl", "đanković & Kožušček", "dzankovic-in-kozuscek", true},
 		{"sl", "ĐankoVIĆ & KOŽUŠČEK", "DZankoVIC-in-KOZUSCEK", false},
 		{"test", "This & that", "this-and-that", true}, // unknown lang, fallback to "en"
@@ -148,6 +151,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"sl", "1\"2'3’4-5–6—7―8", "1234-5-6-7-8", true},
 		{"sv", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"tr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"bg", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 	}
 
 	for index, smlt := range testCases {

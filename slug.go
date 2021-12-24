@@ -91,6 +91,8 @@ func MakeLang(s string, lang string) (slug string) {
 		slug = SubstituteRune(slug, svSub)
 	case "tr", "tur":
 		slug = SubstituteRune(slug, trSub)
+	case "bg", "bgr":
+		slug = SubstituteRune(slug, bgSub)
 	default: // fallback to "en" if lang not found
 		slug = SubstituteRune(slug, enSub)
 	}
