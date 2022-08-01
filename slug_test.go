@@ -273,6 +273,7 @@ func TestSlugMakeSmartTruncate(t *testing.T) {
 		{"DOBROSLAWZYBORT", 100, "dobroslawzybort"},
 		{"Dobroslaw Zybort", 100, "dobroslaw-zybort"},
 		{"Dobroslaw Zybort", 12, "dobroslaw"},
+		{"Dobroslaw Zybort", 15, "dobroslaw"},
 		{"  Dobroslaw     Zybort  ?", 12, "dobroslaw"},
 		{"Ala ma 6 kotów.", 10, "ala-ma-6"},
 		{"Dobrosław Żybort", 5, "dobro"},
