@@ -28,6 +28,8 @@ var (
 	// after MaxLength.
 	MaxLength int
 
+	EnableSmartTruncate = true
+
 	// Lowercase defines if the resulting slug is transformed to lowercase.
 	// Default is true.
 	Lowercase = true
@@ -102,12 +104,16 @@ func MakeLang(s string, lang string) (slug string) {
 		slug = strings.ToLower(slug)
 	}
 
+	if !EnableSmartTruncate {
+		slug = slug[:MaxLength]
+	}
+
 	// Process all remaining symbols
 	slug = regexpNonAuthorizedChars.ReplaceAllString(slug, "-")
 	slug = regexpMultipleDashes.ReplaceAllString(slug, "-")
 	slug = strings.Trim(slug, "-_")
 
-	if MaxLength > 0 {
+	if MaxLength > 0 && EnableSmartTruncate {
 		slug = smartTruncate(slug)
 	}
 

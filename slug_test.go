@@ -266,20 +266,29 @@ func TestSubstituteRuneLang(t *testing.T) {
 
 func TestSlugMakeSmartTruncate(t *testing.T) {
 	testCases := []struct {
-		in        string
-		maxLength int
-		want      string
+		in            string
+		maxLength     int
+		want          string
+		smartTruncate bool
 	}{
-		{"DOBROSLAWZYBORT", 100, "dobroslawzybort"},
-		{"Dobroslaw Zybort", 100, "dobroslaw-zybort"},
-		{"Dobroslaw Zybort", 12, "dobroslaw"},
-		{"  Dobroslaw     Zybort  ?", 12, "dobroslaw"},
-		{"Ala ma 6 kotów.", 10, "ala-ma-6"},
-		{"Dobrosław Żybort", 5, "dobro"},
+		{"DOBROSLAWZYBORT", 100, "dobroslawzybort", true},
+		{"Dobroslaw Zybort", 100, "dobroslaw-zybort", true},
+		{"Dobroslaw Zybort", 12, "dobroslaw", true},
+		{"  Dobroslaw     Zybort  ?", 12, "dobroslaw", true},
+		{"Ala ma 6 kotów.", 10, "ala-ma-6", true},
+		{"Dobrosław Żybort", 5, "dobro", true},
+		{"Long branch-name", 14, "long-branch-na", false},
+		{"Long branch-name", 12, "long-branch", false},
 	}
 
 	for index, smstt := range testCases {
 		MaxLength = smstt.maxLength
+		if smstt.smartTruncate {
+			EnableSmartTruncate = true
+		} else {
+			EnableSmartTruncate = false
+		}
+
 		got := Make(smstt.in)
 		if got != smstt.want {
 			t.Errorf(
