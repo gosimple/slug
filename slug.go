@@ -21,13 +21,15 @@ var (
 	CustomRuneSub map[rune]string
 
 	// MaxLength stores maximum slug length.
-	// It's smart so it will cat slug after full word.
 	// By default slugs aren't shortened.
 	// If MaxLength is smaller than length of the first word, then returned
 	// slug will contain only substring from the first word truncated
 	// after MaxLength.
 	MaxLength int
 
+	// EnableSmartTruncate defines if cutting with MaxLength is smart.
+	// Smart algorithm will cat slug after full word.
+	// Default is true.
 	EnableSmartTruncate = true
 
 	// Lowercase defines if the resulting slug is transformed to lowercase.
