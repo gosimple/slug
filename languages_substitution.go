@@ -10,6 +10,7 @@ func init() {
 	// TODO: Find better way so all langs are merged automatically and better
 	// tested.
 	for _, sub := range []*map[rune]string{
+		&bgSub,
 		&csSub,
 		&deSub,
 		&enSub,
@@ -27,7 +28,6 @@ func init() {
 		&slSub,
 		&svSub,
 		&trSub,
-		&bgSub,
 	} {
 		for key, value := range defaultSub {
 			(*sub)[key] = value
