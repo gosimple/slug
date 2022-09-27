@@ -73,6 +73,8 @@ func TestSlugMakeLang(t *testing.T) {
 		want      string
 		lowercase bool
 	}{
+		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "abvgdezhziyklmnoprstufhtschshshayyuyaabvgdezhziyklmnoprstufhtschshshtayyuya", true},
+		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "ABVGDEZhZIYKLMNOPRSTUFHTsChShShAYYuYaabvgdezhziyklmnoprstufhtschshshtayyuya", false},
 		{"cs", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontescrzyaieuuont", true},
 		{"cs", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontESCRZYAIEUUONT", false},
 		{"ces", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontescrzyaieuuont", true},
@@ -94,7 +96,9 @@ func TestSlugMakeLang(t *testing.T) {
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicSUOIGC", false},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuaghinoquu", true},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuAGHINOQUU", false},
+
 		// & fun.
+		{"bg", "Това и онова", "tova-i-onova", true},
 		{"cs", "Toto & Tamto", "toto-a-tamto", true},
 		{"cs", "Toto & Tamto", "Toto-a-Tamto", false},
 		{"cs", "Toto @ Tamto", "toto-zavinac-tamto", true},
@@ -132,8 +136,10 @@ func TestSlugMakeLang(t *testing.T) {
 		{"sl", "đanković & Kožušček", "dzankovic-in-kozuscek", true},
 		{"sl", "ĐankoVIĆ & KOŽUŠČEK", "DZankoVIC-in-KOZUSCEK", false},
 		{"test", "This & that", "this-and-that", true}, // unknown lang, fallback to "en"
+
 		// Test defaultSub, when adding new lang copy/paste this line,
 		// it contain special characters.
+		{"bg", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"cs", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"de", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"en", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
