@@ -283,15 +283,33 @@ func TestSlugMakeSmartTruncate(t *testing.T) {
 		want          string
 		smartTruncate bool
 	}{
-		{"DOBROSLAWZYBORT", 100, "dobroslawzybort", true},
-		{"Dobroslaw Zybort", 100, "dobroslaw-zybort", true},
+		{"Dobrosław Żybort", 5, "dobro", true},
+		{"Dobroslaw Zybort", 9, "dobroslaw", true},
 		{"Dobroslaw Zybort", 12, "dobroslaw", true},
 		{"Dobroslaw Zybort", 15, "dobroslaw", true},
 		{"Dobroslaw Zybort", 16, "dobroslaw-zybort", true},
 		{"Dobroslaw Zybort", 17, "dobroslaw-zybort", true},
+		{"Dobroslaw Zybort", 100, "dobroslaw-zybort", true},
+		{"abc", 2, "ab", true},
+		{"abc-", 2, "ab", true},
+		{"abc", 4, "abc", true},
+		{"abc-", 4, "abc", true},
+		{"abc-de", 4, "abc", true},
+		{"abc-de", 5, "abc", true},
+		{"abc-de", 6, "abc-de", true},
+		{"abc-de", 7, "abc-de", true},
+		{"abc-de-fg", 6, "abc-de", true},
+		{"abc-de-fg", 7, "abc-de", true},
+		{"abc-de-fg", 8, "abc-de", true},
+		{"abc-de-fg", 9, "abc-de-fg", true},
+		{"abc-de-fg", 10, "abc-de-fg", true},
+
+		{"DOBROSLAWZYBORT", 9, "dobroslaw", true},
+		{"DOBROSLAWZYBORT", 100, "dobroslawzybort", true},
 		{"  Dobroslaw     Zybort  ?", 12, "dobroslaw", true},
 		{"Ala ma 6 kotów.", 10, "ala-ma-6", true},
-		{"Dobrosław Żybort", 5, "dobro", true},
+
+		// No smart truncate
 		{"Long branch-name", 14, "long-branch-na", false},
 		{"Long branch-name", 12, "long-branch", false},
 	}
