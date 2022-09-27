@@ -21,12 +21,16 @@ var (
 	CustomRuneSub map[rune]string
 
 	// MaxLength stores maximum slug length.
-	// It's smart so it will cat slug after full word.
 	// By default slugs aren't shortened.
 	// If MaxLength is smaller than length of the first word, then returned
 	// slug will contain only substring from the first word truncated
 	// after MaxLength.
 	MaxLength int
+
+	// EnableSmartTruncate defines if cutting with MaxLength is smart.
+	// Smart algorithm will cat slug after full word.
+	// Default is true.
+	EnableSmartTruncate = true
 
 	// Lowercase defines if the resulting slug is transformed to lowercase.
 	// Default is true.
@@ -57,6 +61,8 @@ func MakeLang(s string, lang string) (slug string) {
 	// Process string with selected substitution language.
 	// Catch ISO 3166-1, ISO 639-1:2002 and ISO 639-3:2007.
 	switch strings.ToLower(lang) {
+	case "bg", "bgr":
+		slug = SubstituteRune(slug, bgSub)
 	case "cs", "ces":
 		slug = SubstituteRune(slug, csSub)
 	case "de", "deu":
@@ -75,6 +81,8 @@ func MakeLang(s string, lang string) (slug string) {
 		slug = SubstituteRune(slug, huSub)
 	case "id", "idn", "ind":
 		slug = SubstituteRune(slug, idSub)
+	case "it", "ita":
+		slug = SubstituteRune(slug, itSub)
 	case "kz", "kk", "kaz":
 		slug = SubstituteRune(slug, kkSub)
 	case "nb", "nob":
@@ -85,6 +93,8 @@ func MakeLang(s string, lang string) (slug string) {
 		slug = SubstituteRune(slug, nnSub)
 	case "pl", "pol":
 		slug = SubstituteRune(slug, plSub)
+	case "ro", "rou":
+		slug = SubstituteRune(slug, roSub)
 	case "sl", "slv":
 		slug = SubstituteRune(slug, slSub)
 	case "sv", "swe":
@@ -102,12 +112,16 @@ func MakeLang(s string, lang string) (slug string) {
 		slug = strings.ToLower(slug)
 	}
 
+	if !EnableSmartTruncate {
+		slug = slug[:MaxLength]
+	}
+
 	// Process all remaining symbols
 	slug = regexpNonAuthorizedChars.ReplaceAllString(slug, "-")
 	slug = regexpMultipleDashes.ReplaceAllString(slug, "-")
 	slug = strings.Trim(slug, "-_")
 
-	if MaxLength > 0 {
+	if MaxLength > 0 && EnableSmartTruncate {
 		slug = smartTruncate(slug)
 	}
 

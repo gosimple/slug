@@ -54,6 +54,7 @@ func TestSlugMake(t *testing.T) {
 		{"jaja---lol-méméméoo--a", "jaja-lol-mememeoo-a"},
 		{"影師", "ying-shi"},
 		{"Đanković & Kožušček", "dankovic-and-kozuscek"},
+		{"ĂăÂâÎîȘșȚț", "aaaaiisstt"},
 	}
 
 	for index, st := range testCases {
@@ -73,6 +74,8 @@ func TestSlugMakeLang(t *testing.T) {
 		want      string
 		lowercase bool
 	}{
+		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "abvgdezhziyklmnoprstufhtschshshayyuyaabvgdezhziyklmnoprstufhtschshshtayyuya", true},
+		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "ABVGDEZhZIYKLMNOPRSTUFHTsChShShAYYuYaabvgdezhziyklmnoprstufhtschshshtayyuya", false},
 		{"cs", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontescrzyaieuuont", true},
 		{"cs", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontESCRZYAIEUUONT", false},
 		{"ces", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontescrzyaieuuont", true},
@@ -83,18 +86,22 @@ func TestSlugMakeLang(t *testing.T) {
 		{"de", "Äpfel Über Österreich", "Aepfel-Ueber-Oesterreich", false},
 		{"en", "äÄäöÖöüÜü", "aaaooouuu", true},
 		{"en", "äÄäöÖöüÜü", "aAaoOouUu", false},
-		{"gr", "ϊχώΩϋ", "ixwwu", true},
-		{"gr", "ϊχώΩϋ", "ixwwu", false},
+		{"gr", "ϊχώΩϋ", "ichooy", true},
+		{"gr", "ϊχώΩϋ", "ichoOy", false},
+		{"Ell", "ϊχώΩϋ", "ichooy", true}, // Greek
+		{"Ell", "ϊχώΩϋ", "ichoOy", false}, // Greek
 		{"hu", "Árvíztűrő tükörfúrógép", "arvizturo-tukorfurogep", true},
 		{"hu", "Árvíztűrő tükörfúrógép", "Arvizturo-tukorfurogep", false},
 		{"hu", "SzÉlÜtÖtt ŰrÚjsÁgírÓnŐ", "SzElUtOtt-UrUjsAgirOnO", false},
-		{"Ell", "ϊχώΩϋ", "ixwwu", true},
-		{"Ell", "ϊχώΩϋ", "ixwwu", false},
-		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc", true},
-		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicSUOIGC", false},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuaghinoquu", true},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuAGHINOQUU", false},
+		{"ro", "ĂăÂăÎîȘșȚț", "aaaaiisstt", true},
+		{"ro", "ĂăÂăÎîȘșȚț", "AaAaIiSsTt", false},
+		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc", true},
+		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicSUOIGC", false},
+
 		// & fun.
+		{"bg", "Това и онова", "tova-i-onova", true},
 		{"cs", "Toto & Tamto", "toto-a-tamto", true},
 		{"cs", "Toto & Tamto", "Toto-a-Tamto", false},
 		{"cs", "Toto @ Tamto", "toto-zavinac-tamto", true},
@@ -110,9 +117,11 @@ func TestSlugMakeLang(t *testing.T) {
 		{"fr", "This & that", "this-et-that", true},
 		{"fr", "This @ that", "this-arobase-that", true},
 		{"gr", "This & that", "this-kai-that", true},
+		{"ell", "This & that", "this-kai-that", true}, // Greek
+		{"Ell", "This & that", "this-kai-that", true}, // Greek
 		{"id", "This & that", "this-dan-that", true},
-		{"ell", "This & that", "this-kai-that", true},
-		{"Ell", "This & that", "this-kai-that", true},
+		{"it", "This & that", "this-e-that", true},
+		{"it", "This @ that", "this-chiocciola-that", true},
 		{"kk", "This & that", "this-jane-that", true},
 		{"kk", "This @ that", "this-that", true},
 		{"nl", "This & that", "this-en-that", true},
@@ -132,8 +141,10 @@ func TestSlugMakeLang(t *testing.T) {
 		{"sl", "đanković & Kožušček", "dzankovic-in-kozuscek", true},
 		{"sl", "ĐankoVIĆ & KOŽUŠČEK", "DZankoVIC-in-KOZUSCEK", false},
 		{"test", "This & that", "this-and-that", true}, // unknown lang, fallback to "en"
+
 		// Test defaultSub, when adding new lang copy/paste this line,
 		// it contain special characters.
+		{"bg", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"cs", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"de", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"en", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
@@ -145,6 +156,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"nn", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"nl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"pl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"ro", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"sl", "1\"2'3’4-5–6—7―8", "1234-5-6-7-8", true},
 		{"sv", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"tr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
@@ -266,23 +278,32 @@ func TestSubstituteRuneLang(t *testing.T) {
 
 func TestSlugMakeSmartTruncate(t *testing.T) {
 	testCases := []struct {
-		in        string
-		maxLength int
-		want      string
+		in            string
+		maxLength     int
+		want          string
+		smartTruncate bool
 	}{
-		{"DOBROSLAWZYBORT", 100, "dobroslawzybort"},
-		{"Dobroslaw Zybort", 100, "dobroslaw-zybort"},
-		{"Dobroslaw Zybort", 12, "dobroslaw"},
-		{"Dobroslaw Zybort", 15, "dobroslaw"},
-		{"Dobroslaw Zybort", 16, "dobroslaw-zybort"},
-		{"Dobroslaw Zybort", 17, "dobroslaw-zybort"},
-		{"  Dobroslaw     Zybort  ?", 12, "dobroslaw"},
-		{"Ala ma 6 kotów.", 10, "ala-ma-6"},
-		{"Dobrosław Żybort", 5, "dobro"},
+		{"DOBROSLAWZYBORT", 100, "dobroslawzybort", true},
+		{"Dobroslaw Zybort", 100, "dobroslaw-zybort", true},
+		{"Dobroslaw Zybort", 12, "dobroslaw", true},
+		{"Dobroslaw Zybort", 15, "dobroslaw", true},
+		{"Dobroslaw Zybort", 16, "dobroslaw-zybort", true},
+		{"Dobroslaw Zybort", 17, "dobroslaw-zybort", true},
+		{"  Dobroslaw     Zybort  ?", 12, "dobroslaw", true},
+		{"Ala ma 6 kotów.", 10, "ala-ma-6", true},
+		{"Dobrosław Żybort", 5, "dobro", true},
+		{"Long branch-name", 14, "long-branch-na", false},
+		{"Long branch-name", 12, "long-branch", false},
 	}
 
 	for index, smstt := range testCases {
 		MaxLength = smstt.maxLength
+		if smstt.smartTruncate {
+			EnableSmartTruncate = true
+		} else {
+			EnableSmartTruncate = false
+		}
+
 		got := Make(smstt.in)
 		if got != smstt.want {
 			t.Errorf(
