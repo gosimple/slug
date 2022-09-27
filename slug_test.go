@@ -86,13 +86,13 @@ func TestSlugMakeLang(t *testing.T) {
 		{"de", "Äpfel Über Österreich", "Aepfel-Ueber-Oesterreich", false},
 		{"en", "äÄäöÖöüÜü", "aaaooouuu", true},
 		{"en", "äÄäöÖöüÜü", "aAaoOouUu", false},
-		{"gr", "ϊχώΩϋ", "ixwwu", true},
-		{"gr", "ϊχώΩϋ", "ixwwu", false},
+		{"gr", "ϊχώΩϋ", "ichooy", true},
+		{"gr", "ϊχώΩϋ", "ichoOy", false},
+		{"Ell", "ϊχώΩϋ", "ichooy", true}, // Greek
+		{"Ell", "ϊχώΩϋ", "ichoOy", false}, // Greek
 		{"hu", "Árvíztűrő tükörfúrógép", "arvizturo-tukorfurogep", true},
 		{"hu", "Árvíztűrő tükörfúrógép", "Arvizturo-tukorfurogep", false},
 		{"hu", "SzÉlÜtÖtt ŰrÚjsÁgírÓnŐ", "SzElUtOtt-UrUjsAgirOnO", false},
-		{"Ell", "ϊχώΩϋ", "ixwwu", true},
-		{"Ell", "ϊχώΩϋ", "ixwwu", false},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuaghinoquu", true},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuAGHINOQUU", false},
 		{"ro", "ĂăÂăÎîȘșȚț", "aaaaiisstt", true},
@@ -117,11 +117,11 @@ func TestSlugMakeLang(t *testing.T) {
 		{"fr", "This & that", "this-et-that", true},
 		{"fr", "This @ that", "this-arobase-that", true},
 		{"gr", "This & that", "this-kai-that", true},
+		{"ell", "This & that", "this-kai-that", true}, // Greek
+		{"Ell", "This & that", "this-kai-that", true}, // Greek
 		{"id", "This & that", "this-dan-that", true},
 		{"it", "This & that", "this-e-that", true},
 		{"it", "This @ that", "this-chiocciola-that", true},
-		{"ell", "This & that", "this-kai-that", true},
-		{"Ell", "This & that", "this-kai-that", true},
 		{"kk", "This & that", "this-jane-that", true},
 		{"kk", "This @ that", "this-that", true},
 		{"nl", "This & that", "this-en-that", true},
