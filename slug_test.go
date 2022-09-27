@@ -88,8 +88,8 @@ func TestSlugMakeLang(t *testing.T) {
 		{"en", "äÄäöÖöüÜü", "aAaoOouUu", false},
 		{"gr", "ϊχώΩϋ", "ichooy", true},
 		{"gr", "ϊχώΩϋ", "ichoOy", false},
-		{"Ell", "ϊχώΩϋ", "ixwwu", true}, // Greek
-		{"Ell", "ϊχώΩϋ", "ixwwu", false}, // Greek
+		{"Ell", "ϊχώΩϋ", "ichooy", true}, // Greek
+		{"Ell", "ϊχώΩϋ", "ichoOy", false}, // Greek
 		{"hu", "Árvíztűrő tükörfúrógép", "arvizturo-tukorfurogep", true},
 		{"hu", "Árvíztűrő tükörfúrógép", "Arvizturo-tukorfurogep", false},
 		{"hu", "SzÉlÜtÖtt ŰrÚjsÁgírÓnŐ", "SzElUtOtt-UrUjsAgirOnO", false},
