@@ -18,16 +18,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [1.16.x, 1.x]
+        go-version: [1.18.x, 1.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
       - uses: WillAbides/setup-go-faster@v1
         with:
           go-version: ${{ matrix.go-version }}
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           # In order:
           # * Module download cache
@@ -48,7 +48,7 @@ jobs:
           go test -race -coverprofile=coverage.out -covermode=atomic
           go tool cover -func=coverage.out
 
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v3
         with:
           files: ./coverage.out
 
@@ -56,21 +56,15 @@ jobs:
     name: "Run static analysis"
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
       - uses: WillAbides/setup-go-faster@v1
         with:
           go-version: "1.x"
 
-      - run: "GO111MODULE=on go get honnef.co/go/tools/cmd/staticcheck"
-
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/staticcheck
-          key: staticcheck-${{ github.sha }}
-          restore-keys: |
-            staticcheck-
-
       - run: "go vet ./..."
-      - run: "$(go env GOPATH)/bin/staticcheck ./..."
+
+      - uses: dominikh/staticcheck-action@v1
+        with:
+          version: "2022.1.3"
