@@ -54,6 +54,7 @@ func TestSlugMake(t *testing.T) {
 		{"jaja---lol-méméméoo--a", "jaja-lol-mememeoo-a"},
 		{"影師", "ying-shi"},
 		{"Đanković & Kožušček", "dankovic-and-kozuscek"},
+		{"ĂăÂâÎîȘșȚț", "aaaaiisstt"},
 	}
 
 	for index, st := range testCases {
@@ -92,10 +93,12 @@ func TestSlugMakeLang(t *testing.T) {
 		{"hu", "SzÉlÜtÖtt ŰrÚjsÁgírÓnŐ", "SzElUtOtt-UrUjsAgirOnO", false},
 		{"Ell", "ϊχώΩϋ", "ixwwu", true},
 		{"Ell", "ϊχώΩϋ", "ixwwu", false},
-		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc", true},
-		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicSUOIGC", false},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuaghinoquu", true},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuAGHINOQUU", false},
+		{"ro", "ĂăÂăÎîȘșȚț", "aaaaiisstt", true},
+		{"ro", "ĂăÂăÎîȘșȚț", "AaAaIiSsTt", false},
+		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc", true},
+		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicSUOIGC", false},
 
 		// & fun.
 		{"bg", "Това и онова", "tova-i-onova", true},
@@ -153,6 +156,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"nn", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"nl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"pl", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"ro", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"sl", "1\"2'3’4-5–6—7―8", "1234-5-6-7-8", true},
 		{"sv", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"tr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
