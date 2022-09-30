@@ -160,25 +160,19 @@ func SubstituteRune(s string, sub map[rune]string) string {
 }
 
 func smartTruncate(text string) string {
-	if len(text) < MaxLength {
+	if len(text) <= MaxLength {
 		return text
 	}
 
-	var truncated string
-	words := strings.SplitAfter(text, "-")
-	// If MaxLength is smaller than length of the first word return word
-	// truncated after MaxLength.
-	if len(words[0]) > MaxLength {
-		return words[0][:MaxLength]
-	}
-	for _, word := range words {
-		if len(truncated)+len(word)-1 <= MaxLength {
-			truncated = truncated + word
-		} else {
-			break
+	// If slug is too long, we need to find the last '-' before MaxLength, and
+	// we cut there.
+	// If we don't find any, we have only one word, and we cut at MaxLength.
+	for i := MaxLength; i >= 0; i-- {
+		if text[i] == '-' {
+			return text[:i]
 		}
 	}
-	return strings.Trim(truncated, "-")
+	return text[:MaxLength]
 }
 
 // IsSlug returns True if provided text does not contain white characters,
