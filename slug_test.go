@@ -88,7 +88,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"en", "äÄäöÖöüÜü", "aAaoOouUu", false},
 		{"gr", "ϊχώΩϋ", "ichooy", true},
 		{"gr", "ϊχώΩϋ", "ichoOy", false},
-		{"Ell", "ϊχώΩϋ", "ichooy", true}, // Greek
+		{"Ell", "ϊχώΩϋ", "ichooy", true},  // Greek
 		{"Ell", "ϊχώΩϋ", "ichoOy", false}, // Greek
 		{"hu", "Árvíztűrő tükörfúrógép", "arvizturo-tukorfurogep", true},
 		{"hu", "Árvíztűrő tükörfúrógép", "Arvizturo-tukorfurogep", false},
@@ -242,6 +242,7 @@ func TestSubstituteLang(t *testing.T) {
 		{map[string]string{"o": "no", "a": "or"}, "o a o", "no nor no"},
 		{map[string]string{"a": "or", "o": "no"}, "o a o", "no nor no"},
 		{map[string]string{"'": " "}, "That's great", "That s great"},
+		{map[string]string{"♥": "love"}, "Some ♥", "Some love"},
 	}
 
 	for index, sst := range testCases {
