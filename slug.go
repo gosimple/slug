@@ -160,14 +160,14 @@ func SubstituteRune(s string, sub map[rune]string) string {
 }
 
 func smartTruncate(text string) string {
-	if len(text) < MaxLength {
+	if len(text) <= MaxLength {
 		return text
 	}
 
 	// If slug is too long, we need to find the last '-' before MaxLength, and
 	// we cut there.
 	// If we don't find any, we have only one word, and we cut at MaxLength.
-	for i := MaxLength - 1; i >= 0; i-- {
+	for i := MaxLength; i >= 0; i-- {
 		if text[i] == '-' {
 			return text[:i]
 		}
