@@ -288,6 +288,7 @@ func TestSlugMakeSmartTruncate(t *testing.T) {
 		{"Dobroslaw Zybort", 9, "dobroslaw", true},
 		{"Dobroslaw Zybort", 12, "dobroslaw", true},
 		{"Dobroslaw Zybort", 15, "dobroslaw", true},
+		{"Dobroslaw Zybort", 15, "dobroslaw-zybor", false},
 		{"Dobroslaw Zybort", 16, "dobroslaw-zybort", true},
 		{"Dobroslaw Zybort", 17, "dobroslaw-zybort", true},
 		{"Dobroslaw Zybort", 100, "dobroslaw-zybort", true},
@@ -312,6 +313,7 @@ func TestSlugMakeSmartTruncate(t *testing.T) {
 
 		{"DOBROSLAWZYBORT", 9, "dobroslaw", true},
 		{"DOBROSLAWZYBORT", 15, "dobroslawzybort", true},
+		{"DOBROSLAWZYBORT", 17, "dobroslawzybort", false},
 		{"DOBROSLAWZYBORT", 100, "dobroslawzybort", true},
 		{"  Dobroslaw     Zybort  ?", 12, "dobroslaw", true},
 		{"Ala ma 6 kotów.", 10, "ala-ma-6", true},
