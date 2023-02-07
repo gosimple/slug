@@ -187,6 +187,11 @@ var plSub = map[rune]string{
 	'@': "na",
 }
 
+var ptSub = map[rune]string{
+	'&': "e",
+	'@': "em",
+}
+
 var roSub = map[rune]string{
 	'&': "si",
 	'Ă': "A",
