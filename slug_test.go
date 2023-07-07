@@ -399,6 +399,11 @@ func TestSlugMakeAppendTimestamp(t *testing.T) {
 		{"Ala ma 6 kotów.", "ala-ma-6-kotow", false},
 	}
 
+	MaxLength = 0
+	EnableSmartTruncate = true
+	CustomRuneSub = nil
+	CustomSub = nil
+	Lowercase = true
 	for index, st := range testCases {
 		if st.appendTimestamp {
 			AppendTimestamp = true
