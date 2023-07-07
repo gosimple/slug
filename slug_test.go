@@ -6,6 +6,7 @@
 package slug
 
 import (
+	"regexp"
 	"testing"
 )
 
@@ -340,6 +341,85 @@ func TestSlugMakeSmartTruncate(t *testing.T) {
 			t.Errorf(
 				"%d. MaxLength = %v; Make(%#v) = %#v; want %#v",
 				index, smstt.maxLength, smstt.in, got, smstt.want)
+		}
+	}
+}
+
+func TestSlugMakeAppendTimestamp(t *testing.T) {
+	testCases := []struct {
+		in              string
+		want            string
+		appendTimestamp bool
+	}{
+		{"DOBROSLAWZYBORT", "dobroslawzybort", true},
+		{"Dobroslaw Zybort", "dobroslaw-zybort", true},
+		{"  Dobroslaw     Zybort  ?", "dobroslaw-zybort", true},
+		{"Dobrosław Żybort", "dobroslaw-zybort", true},
+		{"Ala ma 6 kotów.", "ala-ma-6-kotow", true},
+
+		{"áÁàÀãÃâÂäÄąĄą̊Ą̊", "aaaaaaaaaaaaaa", true},
+		{"ćĆĉĈçÇčČ", "cccccccc", true},
+		{"éÉèÈẽẼêÊëËęĘěĚ", "eeeeeeeeeeeeee", true},
+		{"íÍìÌĩĨîÎïÏįĮ", "iiiiiiiiiiii", true},
+		{"łŁ", "ll", true},
+		{"ńŃ", "nn", true},
+		{"óÓòÒõÕôÔöÖǫǪǭǬø", "ooooooooooooooo", true},
+		{"śŚšŠ", "ssss", true},
+		{"řŘ", "rr", true},
+		{"ťŤ", "tt", true},
+		{"úÚùÙũŨûÛüÜųŲůŮ", "uuuuuuuuuuuuuu", true},
+		{"y̨Y̨ýÝ", "yyyy", true},
+		{"źŹżŹžŽ", "zzzzzz", true},
+		{"·/,:;`˜'\"", "", true},
+		{"2000–2013", "2000-2013", true},
+		{"style—not", "style-not", true},
+		{"test_slug", "test_slug", true},
+		{"_test_slug_", "test_slug", true},
+		{"-test-slug-", "test-slug", true},
+		{"Æ", "ae", true},
+		{"Ich heiße", "ich-heisse", true},
+		{"𐀀", "", true}, // Bug #53
+		{"% 5 @ 4 $ 3 / 2 & 1 & 2 # 3 @ 4 _ 5", "5-at-4-3-2-and-1-and-2-3-at-4-_-5", true},
+
+		{"This & that", "this-and-that", true},
+		{"fácil €", "facil-eu", true},
+		{"smile ☺", "smile", true},
+		{"Hellö Wörld хелло ворлд", "hello-world-khello-vorld", true},
+		{"\"C'est déjà l’été.\"", "cest-deja-lete", true},
+		{"jaja---lol-méméméoo--a", "jaja-lol-mememeoo-a", true},
+		{"影師", "ying-shi", true},
+		{"Đanković & Kožušček", "dankovic-and-kozuscek", true},
+		{"ĂăÂâÎîȘșȚț", "aaaaiisstt", true},
+
+		// No append timestamp
+		{"DOBROSLAWZYBORT", "dobroslawzybort", false},
+		{"Dobroslaw Zybort", "dobroslaw-zybort", false},
+		{"  Dobroslaw     Zybort  ?", "dobroslaw-zybort", false},
+		{"Dobrosław Żybort", "dobroslaw-zybort", false},
+		{"Ala ma 6 kotów.", "ala-ma-6-kotow", false},
+	}
+
+	for index, st := range testCases {
+		if st.appendTimestamp {
+			AppendTimestamp = true
+		} else {
+			AppendTimestamp = false
+		}
+		got := Make(st.in)
+		if st.appendTimestamp {
+			want := regexp.MustCompile(`^` + st.want + `-\d{10}$`)
+			if !want.MatchString(got) {
+				t.Errorf(
+					"%d. AppendTimestamp = %v; Make(%#v) = %#v; want %#v",
+					index, st.appendTimestamp, st.in, got, want,
+				)
+			}
+			continue
+		}
+		if got != st.want {
+			t.Errorf(
+				"%d. Make(%#v) = %#v; want %#v",
+				index, st.in, got, st.want)
 		}
 	}
 }
