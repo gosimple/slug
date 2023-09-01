@@ -7,9 +7,12 @@ package slug
 
 import (
 	"bytes"
+	"math/rand"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gosimple/unidecode"
 )
@@ -193,4 +196,23 @@ func IsSlug(text string) bool {
 		}
 	}
 	return true
+}
+
+// MakeWithRandomNumber returns a slug generated from the provided string
+// with a random 3-digit number appended at the end. Will use "en" as language
+// substitution.
+func MakeWithRandomNumber(s string) (slug string) {
+
+	// Create the slug from the provided string
+	slug = Make(s)
+
+	// Generate a random 3-digit number
+	rand.Seed(time.Now().UnixNano())
+	randomNumber := rand.Intn(900) + 100
+
+	// Append the random number to the slug
+	randomNumberStr := strconv.Itoa(randomNumber)
+	slug += "-" + randomNumberStr
+
+	return slug
 }

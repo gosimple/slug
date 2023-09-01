@@ -6,6 +6,8 @@
 package slug
 
 import (
+	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -553,4 +555,24 @@ func BenchmarkIsSlugLong(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		IsSlug(longStr)
 	}
+}
+
+func TestSlugMakeWidthRandomNumber(t *testing.T) {
+
+	in := "Hello World"
+
+	result := MakeWithRandomNumber(in)
+
+	expectedPrefix := Make(in) + "-"
+	if !strings.HasPrefix(result, expectedPrefix) {
+		t.Errorf("Expected prefix %s, but got prefix %s", expectedPrefix, result)
+
+	}
+
+	randomNumberStr := strings.TrimPrefix(result, expectedPrefix)
+	randomNumber, err := strconv.Atoi(randomNumberStr)
+	if err != nil || randomNumber < 100 || randomNumber > 999 {
+		t.Errorf("Random number is not within the expected range: %s", randomNumberStr)
+	}
+
 }
