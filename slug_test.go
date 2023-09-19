@@ -203,6 +203,7 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 				got, smust.want)
 		}
 	}
+	CustomSub = nil
 }
 
 func TestSlugMakeSubstituteOrderLang(t *testing.T) {
@@ -230,6 +231,8 @@ func TestSlugMakeSubstituteOrderLang(t *testing.T) {
 				got, smsot.want)
 		}
 	}
+	CustomRuneSub = nil
+	CustomSub = nil
 }
 
 func TestSubstituteLang(t *testing.T) {
