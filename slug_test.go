@@ -74,8 +74,8 @@ func TestSlugMakeLang(t *testing.T) {
 		want      string
 		lowercase bool
 	}{
-		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "abvgdezhziyklmnoprstufhtschshshayyuyaabvgdezhziyklmnoprstufhtschshshtayyuya", true},
-		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "ABVGDEZhZIYKLMNOPRSTUFHTsChShShAYYuYaabvgdezhziyklmnoprstufhtschshshtayyuya", false},
+		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "abvgdezhziyklmnoprstufhtschshshtayyuyaabvgdezhziyklmnoprstufhtschshshtayyuya", true},
+		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "ABVGDEZhZIYKLMNOPRSTUFHTsChShShtAYYuYaabvgdezhziyklmnoprstufhtschshshtayyuya", false},
 		{"cs", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontescrzyaieuuont", true},
 		{"cs", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontESCRZYAIEUUONT", false},
 		{"ces", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontescrzyaieuuont", true},
