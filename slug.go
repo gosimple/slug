@@ -9,7 +9,9 @@ import (
 	"bytes"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gosimple/unidecode"
 )
@@ -35,6 +37,10 @@ var (
 	// Lowercase defines if the resulting slug is transformed to lowercase.
 	// Default is true.
 	Lowercase = true
+
+	// Append timestamp to the end in order to make slug unique
+	// Default is false
+	AppendTimestamp = false
 
 	regexpNonAuthorizedChars = regexp.MustCompile("[^a-zA-Z0-9-_]")
 	regexpMultipleDashes     = regexp.MustCompile("-+")
@@ -93,7 +99,7 @@ func MakeLang(s string, lang string) (slug string) {
 		slug = SubstituteRune(slug, nnSub)
 	case "pl", "pol":
 		slug = SubstituteRune(slug, plSub)
-	case "pt", "prt", "br", "bra":
+	case "pt", "prt", "pt-br", "br", "bra", "por":
 		slug = SubstituteRune(slug, ptSub)
 	case "ro", "rou":
 		slug = SubstituteRune(slug, roSub)
@@ -125,6 +131,10 @@ func MakeLang(s string, lang string) (slug string) {
 
 	if MaxLength > 0 && EnableSmartTruncate {
 		slug = smartTruncate(slug)
+	}
+
+	if AppendTimestamp {
+		slug = slug + "-" + timestamp()
 	}
 
 	return slug
@@ -175,6 +185,11 @@ func smartTruncate(text string) string {
 		}
 	}
 	return text[:MaxLength]
+}
+
+// timestamp returns current timestamp as string
+func timestamp() string {
+	return strconv.FormatInt(time.Now().Unix(), 10)
 }
 
 // IsSlug returns True if provided text does not contain white characters,

@@ -190,6 +190,7 @@ var plSub = map[rune]string{
 
 var ptSub = map[rune]string{
 	'&': "e",
+	'@': "em",
 	'á': "a",
 	'Á': "A",
 	'é': "e",
@@ -274,7 +275,7 @@ var bgSub = map[rune]string{
 	'Ц': "Ts",
 	'Ч': "Ch",
 	'Ш': "Sh",
-	'Щ': "Sh",
+	'Щ': "Sht",
 	'Ъ': "A",
 	'Ь': "Y",
 	'Ю': "Yu",
