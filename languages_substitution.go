@@ -26,6 +26,7 @@ func init() {
 		&nlSub,
 		&nnSub,
 		&plSub,
+		&ptSub,
 		&roSub,
 		&slSub,
 		&svSub,
@@ -190,6 +191,20 @@ var plSub = map[rune]string{
 var ptSub = map[rune]string{
 	'&': "e",
 	'@': "em",
+	'á': "a",
+	'Á': "A",
+	'é': "e",
+	'É': "E",
+	'í': "i",
+	'Í': "I",
+	'ó': "o",
+	'Ó': "O",
+	'ö': "o",
+	'Ö': "O",
+	'ú': "u",
+	'Ú': "U",
+	'ü': "u",
+	'Ü': "U",
 }
 
 var roSub = map[rune]string{
