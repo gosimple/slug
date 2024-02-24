@@ -96,6 +96,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"hu", "SzÉlÜtÖtt ŰrÚjsÁgírÓnŐ", "SzElUtOtt-UrUjsAgirOnO", false},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuaghinoquu", true},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuAGHINOQUU", false},
+		{"pt", "áÁéÉíÍóÓöÖúÚüÜ", "aAeEiIoOoOuUuU", false},
 		{"ro", "ĂăÂăÎîȘșȚț", "aaaaiisstt", true},
 		{"ro", "ĂăÂăÎîȘșȚț", "AaAaIiSsTt", false},
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc", true},
