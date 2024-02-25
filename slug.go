@@ -145,7 +145,7 @@ func MakeLang(s string, lang string) (slug string) {
 // order. Many passes, on one substitution another one could apply.
 func Substitute(s string, sub map[string]string) (buf string) {
 	buf = s
-	var keys []string
+	var keys = make([]string, 0, len(sub))
 	for k := range sub {
 		keys = append(keys, k)
 	}
