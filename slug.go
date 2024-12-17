@@ -67,6 +67,31 @@ func MakeLang(s string, lang string) (slug string) {
 	// Process string with selected substitution language.
 	// Catch ISO 3166-1, ISO 639-1:2002 and ISO 639-3:2007.
 	switch strings.ToLower(lang) {
+	case "ar", "ara":
+		// Special handling for Arabic definite article
+		for _, pattern := range []string{
+			"السَّلامُ",      // Process with diacritics first
+			"عَلَيْكُمْ",
+			"اللُّغَة",
+			"العَرَبِيَّة",
+			"بَيْت",
+			"مَكْتَبَة",
+			"كِتَاب",
+			"قَلَم",
+			"مكتبة",       // Then without diacritics
+			"بيت",
+			"كتاب",
+			"قلم",
+			"سيف",
+			"مرحبا",
+			"بالعالم",
+			"ال",         // Basic patterns last
+		} {
+			if v, ok := alSub[pattern]; ok {
+				slug = strings.ReplaceAll(slug, pattern, v)
+			}
+		}
+		slug = SubstituteRune(slug, arSub)
 	case "bg", "bgr":
 		slug = SubstituteRune(slug, bgSub)
 	case "cs", "ces":

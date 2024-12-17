@@ -163,6 +163,21 @@ func TestSlugMakeLang(t *testing.T) {
 		{"sl", "1\"2'3’4-5–6—7―8", "1234-5-6-7-8", true},
 		{"sv", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"tr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"ar", "مرحبا بالعالم", "mrhba-balalm", true},
+		{"ar", "السَّلامُ عَلَيْكُمْ", "alsalam-aalykm", true},
+		{"ar", "اللُّغَة العَرَبِيَّة", "allgh-alaarby", true},
+		{"ar", "مَكْتَبَة", "mktba", true},
+		{"ar", "كِتَاب", "ktab", true},
+		{"ar", "قَلَم", "qlm", true},
+		{"ar", "بَيْت", "bayt", true},
+		{"ar", "سيف", "saif", true},
+		{"ar", "حاكم", "hakm", true},
+		{"ar", "هدى", "hda", true},
+		{"ar", "الهدى", "alhda", true},
+		{"ar", "شركة القاصة للخدمات الالكترونية", "shrka-alqasa-llkhdmat-alalktrna", true},
+		{"ar", "جامعة الكوفة", "jama-alkfa", true},
+
+
 	}
 
 	for index, smlt := range testCases {
@@ -487,9 +502,12 @@ func BenchmarkMakeShort(b *testing.B) {
 }
 
 func BenchmarkMakeShortSymbols(b *testing.B) {
+	shortStr := "Hello/Hi world"
+
 	b.ReportAllocs()
+	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		Make("·/,:;`˜'\" &€￡￥")
+		Make(shortStr)
 	}
 }
 
