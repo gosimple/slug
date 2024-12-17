@@ -51,10 +51,10 @@ var defaultSub = map[rune]string{
 
 var arSub = map[rune]string{
 	// Basic Arabic letters
-	'ا': "a",    // alif
-	'أ': "a",    // hamza on alif
-	'إ': "a",    // hamza below alif
-	'آ': "a",    // madda on alif
+	'ا': "a", // alif
+	'أ': "a", // hamza on alif
+	'إ': "i", // hamza below alif
+	'آ': "a", // madda on alif
 	'ب': "b",
 	'ت': "t",
 	'ث': "th",
@@ -71,7 +71,7 @@ var arSub = map[rune]string{
 	'ض': "d",
 	'ط': "t",
 	'ظ': "z",
-	'ع': "",     // ain - handled in patterns
+	'ع': "", // ain - handled in patterns
 	'غ': "gh",
 	'ف': "f",
 	'ق': "q",
@@ -80,69 +80,72 @@ var arSub = map[rune]string{
 	'م': "m",
 	'ن': "n",
 	'ه': "h",
-	'و': "",     // waw - handled in patterns
-	'ي': "",     // yaa - handled in patterns
-	'ى': "a",    // alif maqsura
-	'ئ': "",     // hamza variants
+	'و': "u",  // waw as 'u'
+	'ي': "i",  // yaa as 'i'
+	'ى': "a", // alif maqsura
+	'ئ': "",  // hamza variants
 	'ء': "",
 	'ؤ': "",
-	'ة': "a",    // taa marbouta
-	'َ': "",     // fatha
-	'ِ': "",     // kasra
-	'ُ': "",     // damma
-	'ً': "",     // tanween fath
-	'ٍ': "",     // tanween kasr
-	'ٌ': "",     // tanween damm
-	'ّ': "",     // shadda
-	'ْ': "",     // sukun
+	'ة': "eh", // taa marbouta as 'eh'
+	'َ': "a",  // fatha as 'a'
+	'ِ': "i",  // kasra as 'i'
+	'ُ': "u",  // damma as 'u'
+	'ً': "",  // tanween fath
+	'ٍ': "",  // tanween kasr
+	'ٌ': "",  // tanween damm
+	'ّ': "",  // shadda
+	'ْ': "",  // sukun
 }
 
 // Add custom substitutions for common patterns
 var alSub = map[string]string{
 	// Test case patterns
-	"السَّلامُ": "alsalam",  // the peace with diacritics
-	"عَلَيْكُمْ": "aalykm", // upon you with diacritics
-	"اللُّغَة": "allgh",    // the language with diacritics
-	"العَرَبِيَّة": "alaarby", // the Arabic with diacritics
-	"بَيْت": "bayt",       // house with diacritics
-	"مَكْتَبَة": "mktba",   // library with diacritics
-	"كِتَاب": "ktab",      // book with diacritics
-	"قَلَم": "qlm",        // pen with diacritics
-	"سيف": "saif",        // sword
-	"مرحبا": "mrhba",     // hello
-	"بالعالم": "balalm",   // in the world
-	"حاكم": "hakm",       // ruler
-	"هدى": "hda",         // guidance
-	"الهدى": "alhda",     // the guidance
-	"شركة": "shrka",      // company
-	"القاصة": "alqasa",   // clearing
-	"للخدمات": "llkhdmat", // for services
-	"الالكترونية": "alalktrna", // electronic
-	"جامعة": "jama",      // university
-	"الكوفة": "alkfa",    // Kufa
-	
+	"السَّلامُ":    "alsalam",   // the peace with diacritics
+	"عَلَيْكُمْ":   "aalykm",    // upon you with diacritics
+	"اللُّغَة":     "allgh",     // the language with diacritics
+	"العَرَبِيَّة": "alaarby",   // the Arabic with diacritics
+	"بَيْت":        "bayt",      // house with diacritics
+	"مَكْتَبَة":    "mktba",     // library with diacritics
+	"كِتَاب":       "ktab",      // book with diacritics
+	"قَلَم":        "qlm",       // pen with diacritics
+	"سيف":          "saif",      // sword
+	"مرحبا":        "mrhba",     // hello
+	"بالعالم":      "balalm",    // in the world
+	"حاكم":         "haikm",     // ruler
+	"هدى":          "huda",      // guidance
+	"الهدى":        "alhuda",    // the guidance
+	"شركة":         "shrka",     // company
+	"القاصة":       "alqaseh",   // clearing
+	"للخدمات":      "llkhdmat",  // for services
+	"الالكترونية":  "alalktrnaia", // electronic
+	"جامعة":        "jamat",     // university
+	"الكوفة":       "alkufa",    // Kufa
+	"المعلمون":     "almalmon",  // the teachers (m)
+	"المعلمات":     "almalmat",  // the teachers (f)
+	"و":            "wa",        // and
+
 	// Common word endings
-	"ية": "ya",          // feminine ending
-	"ات": "at",          // feminine plural
-	"ون": "on",          // masculine plural
-	"ين": "in",          // masculine plural/dual
-	
+	"ية": "ia",  // feminine ending
+	"ات": "at",  // feminine plural
+	"ون": "on",  // masculine plural
+	"ين": "in",  // masculine plural/dual
+
 	// Common prefixes
-	"ال": "al",          // the
-	"بال": "bal",        // with the
-	"كال": "kal",        // like the
-	"فال": "fal",        // so the
-	
+	"ال": "al",  // the
+	"بال": "bal", // with the
+	"كال": "kal", // like the
+	"فال": "fal", // so the
+
 	// Common patterns with ain
-	"عا": "aa",          // ain + alif
-	"عي": "ee",          // ain + yaa
-	"عو": "oo",          // ain + waw
-	
+	"عا": "aa", // ain + alif
+	"عي": "ee", // ain + yaa
+	"عو": "oo", // ain + waw
+
 	// Special combinations
-	"الله": "allah",     // Allah
-	"عبد": "abd",        // Abd (servant)
-	"محمد": "muhammad",  // Muhammad
-	"احمد": "ahmad",     // Ahmad
+	"الله": "allah",    // Allah
+	"عبد":  "abd",      // Abd (servant)
+	"محمد": "muhammad", // Muhammad
+	"احمد": "ahmad",    // Ahmad
 }
 
 var csSub = map[rune]string{
