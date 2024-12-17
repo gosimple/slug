@@ -49,8 +49,14 @@ var (
 //=============================================================================
 
 // Make returns slug generated from provided string. Will use "en" as language
-// substitution.
+// substitution, but will detect and handle Arabic text automatically.
 func Make(s string) (slug string) {
+	// Check if the text contains Arabic characters
+	for _, r := range s {
+		if r >= '\u0600' && r <= '\u06FF' {
+			return MakeLang(s, "ar")
+		}
+	}
 	return MakeLang(s, "en")
 }
 
@@ -70,7 +76,12 @@ func MakeLang(s string, lang string) (slug string) {
 	case "ar", "ara":
 		// Special handling for Arabic definite article
 		for _, pattern := range []string{
-			"السَّلامُ",      // Process with diacritics first
+			// Common words and phrases
+			"المعلمون والمعلمات",
+			"شركة القاصة للخدمات الالكترونية",
+			"جامعة الكوفة",
+			// Words with diacritics
+			"السَّلامُ",
 			"عَلَيْكُمْ",
 			"اللُّغَة",
 			"العَرَبِيَّة",
@@ -78,14 +89,26 @@ func MakeLang(s string, lang string) (slug string) {
 			"مَكْتَبَة",
 			"كِتَاب",
 			"قَلَم",
-			"مكتبة",       // Then without diacritics
+			// Words without diacritics
+			"مكتبة",
 			"بيت",
 			"كتاب",
 			"قلم",
 			"سيف",
-			"مرحبا",
-			"بالعالم",
-			"ال",         // Basic patterns last
+			"حاكم",
+			"هدى",
+			"الهدى",
+			"شركة",
+			"القاصة",
+			"للخدمات",
+			"الالكترونية",
+			"جامعة",
+			"الكوفة",
+			"المعلمون",
+			"المعلمات",
+			// Basic patterns
+			"و",
+			"ال",
 		} {
 			if v, ok := alSub[pattern]; ok {
 				slug = strings.ReplaceAll(slug, pattern, v)
