@@ -176,7 +176,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"ar", "الهدى", "alhda", true},
 		{"ar", "شركة القاصة للخدمات الالكترونية", "shrka-alqasa-llkhdmat-alalktrna", true},
 		{"ar", "جامعة الكوفة", "jama-alkfa", true},
-
+		{"ar", "المعلمون والمعلمات", "almlmn-almlmat", true},
 
 	}
 
