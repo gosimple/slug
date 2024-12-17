@@ -38,6 +38,30 @@ Example:
 		}
 		textSub := slug.Make("water is hot")
 		fmt.Println(textSub) // Will print: "sand-is-hot"
+
+		// Arabic text examples
+		arText := slug.MakeLang("مكتبة العربية", "ar")
+		fmt.Println(arText) // Will print: "mktba-alaarby"
+
+		// Arabic with definite article
+		arDefText := slug.MakeLang("الهدى", "ar")
+		fmt.Println(arDefText) // Will print: "alhda"
+
+		// Arabic company name
+		arCompany := slug.MakeLang("شركة القاصة للخدمات الالكترونية", "ar")
+		fmt.Println(arCompany) // Will print: "shrka-alqasa-llkhdmat-alalktrna"
+
+		// Arabic university name
+		arUni := slug.MakeLang("جامعة الكوفة", "ar")
+		fmt.Println(arUni) // Will print: "jama-alkfa"
+
+		// Arabic name with special patterns
+		arName := slug.MakeLang("عبد الله محمد", "ar")
+		fmt.Println(arName) // Will print: "abd-allah-muhammad"
+
+		// Arabic with common endings
+		arPlural := slug.MakeLang("المعلمون والمعلمات", "ar")
+		fmt.Println(arPlural) // Will print: "almalmon-walmalmat"
 	}
 
 Requests or bugs?

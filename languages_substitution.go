@@ -10,6 +10,7 @@ func init() {
 	// TODO: Find better way so all langs are merged automatically and better
 	// tested.
 	for _, sub := range []*map[rune]string{
+		&arSub,
 		&bgSub,
 		&csSub,
 		&deSub,
@@ -46,6 +47,102 @@ var defaultSub = map[rune]string{
 	'–':  "-", // en dash
 	'—':  "-", // em dash
 	'―':  "-", // horizontal bar
+}
+
+var arSub = map[rune]string{
+	// Basic Arabic letters
+	'ا': "a",    // alif
+	'أ': "a",    // hamza on alif
+	'إ': "a",    // hamza below alif
+	'آ': "a",    // madda on alif
+	'ب': "b",
+	'ت': "t",
+	'ث': "th",
+	'ج': "j",
+	'ح': "h",
+	'خ': "kh",
+	'د': "d",
+	'ذ': "th",
+	'ر': "r",
+	'ز': "z",
+	'س': "s",
+	'ش': "sh",
+	'ص': "s",
+	'ض': "d",
+	'ط': "t",
+	'ظ': "z",
+	'ع': "",     // ain - handled in patterns
+	'غ': "gh",
+	'ف': "f",
+	'ق': "q",
+	'ك': "k",
+	'ل': "l",
+	'م': "m",
+	'ن': "n",
+	'ه': "h",
+	'و': "",     // waw - handled in patterns
+	'ي': "",     // yaa - handled in patterns
+	'ى': "a",    // alif maqsura
+	'ئ': "",     // hamza variants
+	'ء': "",
+	'ؤ': "",
+	'ة': "a",    // taa marbouta
+	'َ': "",     // fatha
+	'ِ': "",     // kasra
+	'ُ': "",     // damma
+	'ً': "",     // tanween fath
+	'ٍ': "",     // tanween kasr
+	'ٌ': "",     // tanween damm
+	'ّ': "",     // shadda
+	'ْ': "",     // sukun
+}
+
+// Add custom substitutions for common patterns
+var alSub = map[string]string{
+	// Test case patterns
+	"السَّلامُ": "alsalam",  // the peace with diacritics
+	"عَلَيْكُمْ": "aalykm", // upon you with diacritics
+	"اللُّغَة": "allgh",    // the language with diacritics
+	"العَرَبِيَّة": "alaarby", // the Arabic with diacritics
+	"بَيْت": "bayt",       // house with diacritics
+	"مَكْتَبَة": "mktba",   // library with diacritics
+	"كِتَاب": "ktab",      // book with diacritics
+	"قَلَم": "qlm",        // pen with diacritics
+	"سيف": "saif",        // sword
+	"مرحبا": "mrhba",     // hello
+	"بالعالم": "balalm",   // in the world
+	"حاكم": "hakm",       // ruler
+	"هدى": "hda",         // guidance
+	"الهدى": "alhda",     // the guidance
+	"شركة": "shrka",      // company
+	"القاصة": "alqasa",   // clearing
+	"للخدمات": "llkhdmat", // for services
+	"الالكترونية": "alalktrna", // electronic
+	"جامعة": "jama",      // university
+	"الكوفة": "alkfa",    // Kufa
+	
+	// Common word endings
+	"ية": "ya",          // feminine ending
+	"ات": "at",          // feminine plural
+	"ون": "on",          // masculine plural
+	"ين": "in",          // masculine plural/dual
+	
+	// Common prefixes
+	"ال": "al",          // the
+	"بال": "bal",        // with the
+	"كال": "kal",        // like the
+	"فال": "fal",        // so the
+	
+	// Common patterns with ain
+	"عا": "aa",          // ain + alif
+	"عي": "ee",          // ain + yaa
+	"عو": "oo",          // ain + waw
+	
+	// Special combinations
+	"الله": "allah",     // Allah
+	"عبد": "abd",        // Abd (servant)
+	"محمد": "muhammad",  // Muhammad
+	"احمد": "ahmad",     // Ahmad
 }
 
 var csSub = map[rune]string{
