@@ -472,6 +472,52 @@ func TestIsSlug(t *testing.T) {
 	})
 }
 
+func TestSlugMakeDisableTrimOptions(t *testing.T) {
+	testCases := []struct {
+		name                string
+		in                  string
+		want                string
+		disableMultipleDash bool
+		disableEndsTrim     bool
+	}{
+		// Test multiple dash trim
+		{"multiple dashes preserved", "test--slug", "test--slug", true, false},
+		{"multiple dashes and spaces", "spaces  converted  to--dashes", "spaces--converted--to--dashes", true, false},
+		{"symbols to multiple dashes", "symbols!!!replaced", "symbols---replaced", true, false},
+		{"only dashes multiple", "----", "", true, false},
+		{"only underscores multiple", "____", "", true, false},
+
+		// Test end trim
+		{"leading/trailing dashes", "-test-slug-", "-test-slug-", false, true},
+		{"leading/trailing underscores", "_test_slug_", "_test_slug_", false, true},
+		{"mixed endings", "-_mixed_-", "-_mixed_-", false, true},
+		{"only dashes end", "----", "-", false, true},
+		{"only underscores end", "____", "____", false, true},
+
+		// Test both options together
+		{"both options enabled", "--test---slug--", "--test---slug--", true, true},
+		{"multiple types of edges", "__test---slug--", "__test---slug--", true, true},
+		{"only dashes both", "----", "----", true, true},
+		{"only underscores both", "____", "____", true, true},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			DisableMultipleDashTrim = tc.disableMultipleDash
+			DisableEndsTrim = tc.disableEndsTrim
+			defer func() {
+				DisableMultipleDashTrim = false
+				DisableEndsTrim = false
+			}()
+
+			got := Make(tc.in)
+			if got != tc.want {
+				t.Errorf("Make(%#v) = %#v; want %#v", tc.in, got, tc.want)
+			}
+		})
+	}
+}
+
 func BenchmarkMakeShortAscii(b *testing.B) {
 	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
