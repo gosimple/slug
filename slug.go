@@ -38,6 +38,14 @@ var (
 	// Default is true.
 	Lowercase = true
 
+	// DisableMultipleDashTrim defines if multiple dashes should be preserved.
+	// Default is false (multiple dashes will be replaced with single dash).
+	DisableMultipleDashTrim = false
+
+	// DisableEndsTrim defines if the slug should keep leading and trailing
+	// dashes and underscores. Default is false (trim enabled).
+	DisableEndsTrim = false
+
 	// Append timestamp to the end in order to make slug unique
 	// Default is false
 	AppendTimestamp = false
@@ -126,8 +134,12 @@ func MakeLang(s string, lang string) (slug string) {
 
 	// Process all remaining symbols
 	slug = regexpNonAuthorizedChars.ReplaceAllString(slug, "-")
-	slug = regexpMultipleDashes.ReplaceAllString(slug, "-")
-	slug = strings.Trim(slug, "-_")
+	if !DisableMultipleDashTrim {
+		slug = regexpMultipleDashes.ReplaceAllString(slug, "-")
+	}
+	if !DisableEndsTrim {
+		slug = strings.Trim(slug, "-_")
+	}
 
 	if MaxLength > 0 && EnableSmartTruncate {
 		slug = smartTruncate(slug)
@@ -145,7 +157,7 @@ func MakeLang(s string, lang string) (slug string) {
 // order. Many passes, on one substitution another one could apply.
 func Substitute(s string, sub map[string]string) (buf string) {
 	buf = s
-	var keys = make([]string, 0, len(sub))
+	keys := make([]string, 0, len(sub))
 	for k := range sub {
 		keys = append(keys, k)
 	}
