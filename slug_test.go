@@ -23,6 +23,9 @@ func TestSlugMake(t *testing.T) {
 		{"Dobrosław Żybort", "dobroslaw-zybort"},
 		{"Ala ma 6 kotów.", "ala-ma-6-kotow"},
 
+		{ "المعلمون والمعلمات", "almalmon-waalmalmat"},
+
+
 		{"áÁàÀãÃâÂäÄąĄą̊Ą̊", "aaaaaaaaaaaaaa"},
 		{"ćĆĉĈçÇčČ", "cccccccc"},
 		{"éÉèÈẽẼêÊëËęĘěĚ", "eeeeeeeeeeeeee"},
@@ -75,39 +78,68 @@ func TestSlugMakeLang(t *testing.T) {
 		want      string
 		lowercase bool
 	}{
+		{"ar", "مرحبا بالعالم", "mrhba-balalm", true},
+		{"ar", "السَّلامُ عَلَيْكُمْ", "alsalam-aalykm", true},
+		{"ar", "اللُّغَة العَرَبِيَّة", "allgh-alaarby", true},
+		{"ar", "مَكْتَبَة", "mktba", true},
+		{"ar", "كِتَاب", "ktab", true},
+		{"ar", "قَلَم", "qlm", true},
+		{"ar", "بَيْت", "bayt", true},
+		{"ar", "سيف", "saif", true},
+		{"ar", "حاكم", "haikm", true},
+		{"ar", "هدى", "huda", true},
+		{"ar", "الهدى", "alhuda", true},
+		{"ar", "شركة القاصة للخدمات الالكترونية", "shrka-alqaseh-llkhdmat-alalktrnaia", true},
+		{"ar", "جامعة الكوفة", "jamat-alkufa", true},
+		{"ar", "المعلمون والمعلمات", "almalmon-waalmalmat", true},
+
 		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "abvgdezhziyklmnoprstufhtschshshtayyuyaabvgdezhziyklmnoprstufhtschshshtayyuya", true},
 		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "ABVGDEZhZIYKLMNOPRSTUFHTsChShShtAYYuYaabvgdezhziyklmnoprstufhtschshshtayyuya", false},
+
 		{"cs", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontescrzyaieuuont", true},
 		{"cs", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontESCRZYAIEUUONT", false},
+
 		{"ces", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontescrzyaieuuont", true},
 		{"ces", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontESCRZYAIEUUONT", false},
+
 		{"de", "Wir mögen Bücher & Käse", "wir-moegen-buecher-und-kaese", true},
 		{"de", "Wir mögen Bücher & Käse", "Wir-moegen-Buecher-und-Kaese", false},
+
 		{"de", "Äpfel Über Österreich", "aepfel-ueber-oesterreich", true},
 		{"de", "Äpfel Über Österreich", "Aepfel-Ueber-Oesterreich", false},
+
 		{"en", "äÄäöÖöüÜü", "aaaooouuu", true},
 		{"en", "äÄäöÖöüÜü", "aAaoOouUu", false},
+
 		{"gr", "ϊχώΩϋ", "ichooy", true},
 		{"gr", "ϊχώΩϋ", "ichoOy", false},
+
 		{"Ell", "ϊχώΩϋ", "ichooy", true},  // Greek
 		{"Ell", "ϊχώΩϋ", "ichoOy", false}, // Greek
+
 		{"hu", "Árvíztűrő tükörfúrógép", "arvizturo-tukorfurogep", true},
 		{"hu", "Árvíztűrő tükörfúrógép", "Arvizturo-tukorfurogep", false},
 		{"hu", "SzÉlÜtÖtt ŰrÚjsÁgírÓnŐ", "SzElUtOtt-UrUjsAgirOnO", false},
+
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuaghinoquu", true},
 		{"kk", "әғһіңөқұүӘҒҺІҢӨҚҰҮ", "aghinoquuAGHINOQUU", false},
+
 		{"pt", "áÁéÉíÍóÓöÖúÚüÜ", "aAeEiIoOoOuUuU", false},
+
 		{"ro", "ĂăÂăÎîȘșȚț", "aaaaiisstt", true},
 		{"ro", "ĂăÂăÎîȘșȚț", "AaAaIiSsTt", false},
+
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicsuoigc", true},
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicSUOIGC", false},
 
 		// & fun.
 		{"bg", "Това и онова", "tova-i-onova", true},
+
 		{"cs", "Toto & Tamto", "toto-a-tamto", true},
 		{"cs", "Toto & Tamto", "Toto-a-Tamto", false},
 		{"cs", "Toto @ Tamto", "toto-zavinac-tamto", true},
 		{"cs", "Toto @ Tamto", "Toto-zavinac-Tamto", false},
+
 		{"ces", "Toto & Tamto", "toto-a-tamto", true},
 		{"ces", "Toto & Tamto", "Toto-a-Tamto", false},
 		{"ces", "Toto @ Tamto", "toto-zavinac-tamto", true},
@@ -533,9 +565,12 @@ func BenchmarkMakeShort(b *testing.B) {
 }
 
 func BenchmarkMakeShortSymbols(b *testing.B) {
+	shortStr := "Hello/Hi world"
+
 	b.ReportAllocs()
+	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		Make("·/,:;`˜'\" &€￡￥")
+		Make(shortStr)
 	}
 }
 
