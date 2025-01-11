@@ -163,6 +163,11 @@ func TestSlugMakeLang(t *testing.T) {
 		{"sl", "1\"2'3’4-5–6—7―8", "1234-5-6-7-8", true},
 		{"sv", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"tr", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
+		{"vi", "10 Bí Quyết Để Thành Công Trong Công Việc", "10-bi-quyet-de-thanh-cong-trong-cong-viec", true},
+		{"vi", "Cách Sử Dụng @ trong Email Hiệu Quả", "cach-su-dung-a-cong-trong-email-hieu-qua", true},
+		{"vi", "Học Lập Trình: #1 Hành Trình Đầy Thử Thách!", "hoc-lap-trinh-1-hanh-trinh-day-thu-thach", true},
+		{"vi", "Câu Chuyện Thành Công & Những Bài Học", "cau-chuyen-thanh-cong-va-nhung-bai-hoc", true},
+		{"vi", "Tăng Thu Nhập 100% Nhờ Kinh Doanh Online!", "tang-thu-nhap-100-phan-tram-nho-kinh-doanh-online", true},
 	}
 
 	for index, smlt := range testCases {
