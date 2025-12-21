@@ -38,6 +38,10 @@ Example:
 		}
 		textSub := slug.Make("water is hot")
 		fmt.Println(textSub) // Will print: "sand-is-hot"
+
+		// Arabic language support
+		arText := slug.MakeLang("المعلمون والمعلمات", "ar")
+		fmt.Println(arText) // Will print: "almalmon-waalmalmat"
 	}
 
 Requests or bugs?
