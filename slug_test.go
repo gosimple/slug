@@ -79,6 +79,7 @@ func TestSlugMakeLang(t *testing.T) {
 		lowercase bool
 	}{
 		{"ar", "مرحبا بالعالم", "mrhba-balalm", true},
+		{"ar", "مرحبا بالعالم", "mrhba-balalm", false},
 		{"ar", "السَّلامُ عَلَيْكُمْ", "alsalam-aalykm", true},
 		{"ar", "اللُّغَة العَرَبِيَّة", "allgh-alaarby", true},
 		{"ar", "مَكْتَبَة", "mktba", true},
@@ -565,12 +566,9 @@ func BenchmarkMakeShort(b *testing.B) {
 }
 
 func BenchmarkMakeShortSymbols(b *testing.B) {
-	shortStr := "Hello/Hi world"
-
 	b.ReportAllocs()
-	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		Make(shortStr)
+		Make("·/,:;`˜'\" &€￡￥")
 	}
 }
 
