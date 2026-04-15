@@ -55,7 +55,7 @@ var csSub = map[rune]string{
 
 var deSub = map[rune]string{
 	'&': "und",
-	'@': "an",
+	'@': "at",
 	'ä': "ae",
 	'Ä': "Ae",
 	'ö': "oe",
