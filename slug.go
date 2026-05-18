@@ -208,6 +208,8 @@ func timestamp() string {
 // punctuation, all letters are lower case and only from ASCII range.
 // It could contain `-` and `_` but not at the beginning or end of the text.
 // It should be in range of the MaxLength var if specified.
+// Anything covered by an active CustomSub mapping is also disqualified, since
+// Make would replace it.
 // All output from slug.Make(text) should pass this test.
 func IsSlug(text string) bool {
 	if text == "" ||
@@ -218,6 +220,11 @@ func IsSlug(text string) bool {
 	}
 	for _, c := range text {
 		if (c < 'a' || c > 'z') && c != '-' && c != '_' && (c < '0' || c > '9') {
+			return false
+		}
+	}
+	for key := range CustomSub {
+		if strings.Contains(text, key) {
 			return false
 		}
 	}
