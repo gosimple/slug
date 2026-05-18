@@ -470,6 +470,19 @@ func TestIsSlug(t *testing.T) {
 		}
 		MaxLength = 0
 	})
+
+	t.Run("CustomSub", func(t *testing.T) {
+		// Regression for #93: a string is only "a slug" if no active
+		// CustomSub mapping would still rewrite a character in it.
+		CustomSub = map[string]string{"_": "-"}
+		defer func() { CustomSub = nil }()
+		if got := IsSlug("hello_world"); got {
+			t.Errorf("IsSlug(hello_world) = true, want false with CustomSub mapping '_' -> '-'")
+		}
+		if got := IsSlug("hello-world"); !got {
+			t.Errorf("IsSlug(hello-world) = false, want true")
+		}
+	})
 }
 
 func TestSlugMakeDisableTrimOptions(t *testing.T) {
