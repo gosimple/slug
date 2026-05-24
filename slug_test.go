@@ -344,6 +344,20 @@ func TestSlugMakeSmartTruncate(t *testing.T) {
 				index, smstt.maxLength, smstt.in, got, smstt.want)
 		}
 	}
+	MaxLength = 0
+	EnableSmartTruncate = true
+}
+
+func TestSlugMakeDisableSmartTruncateNoMaxLength(t *testing.T) {
+	defer func() {
+		EnableSmartTruncate = true
+		MaxLength = 0
+	}()
+	EnableSmartTruncate = false
+	MaxLength = 0
+	if got := Make("Hello World"); got != "hello-world" {
+		t.Errorf("Make(%#v) = %#v; want %#v", "Hello World", got, "hello-world")
+	}
 }
 
 func TestSlugMakeAppendTimestamp(t *testing.T) {

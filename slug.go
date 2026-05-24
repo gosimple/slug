@@ -128,7 +128,7 @@ func MakeLang(s string, lang string) (slug string) {
 		slug = strings.ToLower(slug)
 	}
 
-	if !EnableSmartTruncate && len(slug) >= MaxLength {
+	if !EnableSmartTruncate && MaxLength > 0 && len(slug) >= MaxLength {
 		slug = slug[:MaxLength]
 	}
 
