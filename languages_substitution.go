@@ -10,6 +10,7 @@ func init() {
 	// TODO: Find better way so all langs are merged automatically and better
 	// tested.
 	for _, sub := range []*map[rune]string{
+		&arSub,
 		&bgSub,
 		&csSub,
 		&deSub,
@@ -46,6 +47,94 @@ var defaultSub = map[rune]string{
 	'–':  "-", // en dash
 	'—':  "-", // em dash
 	'―':  "-", // horizontal bar
+}
+
+var arSub = map[rune]string{
+	'&': "wa",
+
+	// Arabic alphabet
+	'ا': "a",
+	'أ': "a",
+	'إ': "i",
+	'آ': "a",
+	'ٱ': "a",
+	'ء': "",
+	'ب': "b",
+	'ت': "t",
+	'ث': "th",
+	'ج': "j",
+	'ح': "h",
+	'خ': "kh",
+	'د': "d",
+	'ذ': "dh",
+	'ر': "r",
+	'ز': "z",
+	'س': "s",
+	'ش': "sh",
+	'ص': "s",
+	'ض': "d",
+	'ط': "t",
+	'ظ': "z",
+	'ع': "",
+	'غ': "gh",
+	'ف': "f",
+	'ق': "q",
+	'ك': "k",
+	'ل': "l",
+	'م': "m",
+	'ن': "n",
+	'ه': "h",
+	'و': "w",
+	'ي': "y",
+	'ى': "a",
+	'ة': "a",
+	'ؤ': "w",
+	'ئ': "y",
+
+	// Tashkeel / Diacritics (Harakat)
+	'َ': "", // fatha
+	'ُ': "", // damma
+	'ِ': "", // kasra
+	'ً': "", // tanween fath
+	'ٌ': "", // tanween damm
+	'ٍ': "", // tanween kasr
+	'ّ': "", // shadda
+	'ْ': "", // sukun
+	'ٰ': "", // dagger alif
+	'ـ': "", // tatweel / kashida
+
+	// Arabic-Indic digits
+	'٠': "0",
+	'١': "1",
+	'٢': "2",
+	'٣': "3",
+	'٤': "4",
+	'٥': "5",
+	'٦': "6",
+	'٧': "7",
+	'٨': "8",
+	'٩': "9",
+
+	// Eastern Arabic-Indic digits
+	'۰': "0",
+	'۱': "1",
+	'۲': "2",
+	'۳': "3",
+	'۴': "4",
+	'۵': "5",
+	'۶': "6",
+	'۷': "7",
+	'۸': "8",
+	'۹': "9",
+
+	// Extended Arabic letters
+	'پ': "p",
+	'چ': "ch",
+	'ژ': "zh",
+	'گ': "g",
+	'ک': "k",
+	'ی': "y",
+	'ڤ': "v",
 }
 
 var csSub = map[rune]string{
