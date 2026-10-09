@@ -205,19 +205,36 @@ func timestamp() string {
 }
 
 // IsSlug returns True if provided text does not contain white characters,
-// punctuation, all letters are lower case and only from ASCII range.
-// It could contain `-` and `_` but not at the beginning or end of the text.
+// punctuation, all letters are lower case (unless Lowercase is false) and only
+// from ASCII range.
+// It could contain `-` and `_` but not at the beginning or end of the text
+// (unless DisableEndsTrim is true).
 // It should be in range of the MaxLength var if specified.
+// Respects CustomSub, CustomRuneSub, Lowercase, and DisableEndsTrim settings.
 // All output from slug.Make(text) should pass this test.
 func IsSlug(text string) bool {
 	if text == "" ||
 		(MaxLength > 0 && len(text) > MaxLength) ||
-		text[0] == '-' || text[0] == '_' ||
-		text[len(text)-1] == '-' || text[len(text)-1] == '_' {
+		(!DisableEndsTrim && (text[0] == '-' || text[0] == '_' ||
+			text[len(text)-1] == '-' || text[len(text)-1] == '_')) {
 		return false
 	}
 	for _, c := range text {
-		if (c < 'a' || c > 'z') && c != '-' && c != '_' && (c < '0' || c > '9') {
+		if (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-' || c == '_' {
+			continue
+		}
+		if !Lowercase && c >= 'A' && c <= 'Z' {
+			continue
+		}
+		return false
+	}
+	for key, sub := range CustomSub {
+		if key != "" && sub != key && strings.Contains(text, key) {
+			return false
+		}
+	}
+	for r, sub := range CustomRuneSub {
+		if sub != string(r) && strings.ContainsRune(text, r) {
 			return false
 		}
 	}

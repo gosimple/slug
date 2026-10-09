@@ -470,6 +470,132 @@ func TestIsSlug(t *testing.T) {
 		}
 		MaxLength = 0
 	})
+
+	t.Run("CustomSub", func(t *testing.T) {
+		CustomSub = map[string]string{
+			"_":   "-",
+			"foo": "bar",
+			"id":  "id",
+			"":    "ignored",
+		}
+		defer func() { CustomSub = nil }()
+
+		testCases := []struct {
+			text string
+			want bool
+		}{
+			{"hello-world", true},
+			{"hello_world", false},
+			{"foo-slug", false},
+			{"bar-slug", true},
+			{"id-slug", true},
+		}
+
+		for _, tc := range testCases {
+			if got := IsSlug(tc.text); got != tc.want {
+				t.Errorf("IsSlug(%q) = %v, want %v", tc.text, got, tc.want)
+			}
+		}
+	})
+
+	t.Run("CustomRuneSub", func(t *testing.T) {
+		CustomRuneSub = map[rune]string{
+			'_': "-",
+			'a': "b",
+			'c': "c",
+		}
+		defer func() { CustomRuneSub = nil }()
+
+		testCases := []struct {
+			text string
+			want bool
+		}{
+			{"hello-world", true},
+			{"hello_world", false},
+			{"abc", false},
+			{"bbc", true},
+		}
+
+		for _, tc := range testCases {
+			if got := IsSlug(tc.text); got != tc.want {
+				t.Errorf("IsSlug(%q) = %v, want %v", tc.text, got, tc.want)
+			}
+		}
+	})
+
+	t.Run("Lowercase", func(t *testing.T) {
+		Lowercase = false
+		defer func() { Lowercase = true }()
+
+		testCases := []struct {
+			text string
+			want bool
+		}{
+			{"Some-More", true},
+			{"some-more", true},
+			{"SOME_MORE_123", true},
+			{"Some More", false},
+			{"-Some-More", false},
+			{"Dobrosław Żybort", false},
+		}
+
+		for _, tc := range testCases {
+			if got := IsSlug(tc.text); got != tc.want {
+				t.Errorf("IsSlug(%q) with Lowercase=false = %v, want %v", tc.text, got, tc.want)
+			}
+		}
+	})
+
+	t.Run("DisableEndsTrim", func(t *testing.T) {
+		DisableEndsTrim = true
+		defer func() { DisableEndsTrim = false }()
+
+		testCases := []struct {
+			text string
+			want bool
+		}{
+			{"-some-", true},
+			{"_some_", true},
+			{"-some", true},
+			{"some-", true},
+			{"-", true},
+			{"_", true},
+			{"", false},
+			{"-some more-", false},
+		}
+
+		for _, tc := range testCases {
+			if got := IsSlug(tc.text); got != tc.want {
+				t.Errorf("IsSlug(%q) with DisableEndsTrim=true = %v, want %v", tc.text, got, tc.want)
+			}
+		}
+	})
+
+	t.Run("CombinedConfiguration", func(t *testing.T) {
+		CustomSub = map[string]string{"_": "-"}
+		Lowercase = false
+		DisableEndsTrim = true
+		defer func() {
+			CustomSub = nil
+			Lowercase = true
+			DisableEndsTrim = false
+		}()
+
+		testCases := []struct {
+			text string
+			want bool
+		}{
+			{"-Hello-World-", true},
+			{"-Hello_World-", false},
+			{"-hello-world-", true},
+		}
+
+		for _, tc := range testCases {
+			if got := IsSlug(tc.text); got != tc.want {
+				t.Errorf("IsSlug(%q) with combined settings = %v, want %v", tc.text, got, tc.want)
+			}
+		}
+	})
 }
 
 func TestSlugMakeDisableTrimOptions(t *testing.T) {
