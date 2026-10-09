@@ -75,6 +75,8 @@ func MakeLang(s string, lang string) (slug string) {
 	// Process string with selected substitution language.
 	// Catch ISO 3166-1, ISO 639-1:2002 and ISO 639-3:2007.
 	switch strings.ToLower(lang) {
+	case "ar", "ara":
+		slug = SubstituteRune(slug, arSub)
 	case "bg", "bgr":
 		slug = SubstituteRune(slug, bgSub)
 	case "cs", "ces":

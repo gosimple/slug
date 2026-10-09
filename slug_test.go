@@ -75,6 +75,21 @@ func TestSlugMakeLang(t *testing.T) {
 		want      string
 		lowercase bool
 	}{
+		{"ar", "مرحبا بالعالم", "mrhba-balalm", true},
+		{"ar", "مرحبا بالعالم", "mrhba-balalm", false},
+		{"ara", "مرحبا بالعالم", "mrhba-balalm", true},
+		{"ar", "السَّلامُ عَلَيْكُمْ", "alslam-lykm", true},
+		{"ar", "كِتَاب", "ktab", true},
+		{"ar", "كتاب", "ktab", true},
+		{"ar", "مَكْتَبَة", "mktba", true},
+		{"ar", "مكتبة", "mktba", true},
+		{"ar", "قَلَم", "qlm", true},
+		{"ar", "قلم", "qlm", true},
+		{"ar", "غرفة ٢٠٥", "ghrfa-205", true},
+		{"ar", "أجهزة ذكية", "ajhza-dhkya", true},
+		{"ar", "ثورة", "thwra", true},
+		{"ar", "شمس و قمر", "shms-w-qmr", true},
+		{"ar", "هدى", "hda", true},
 		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "abvgdezhziyklmnoprstufhtschshshtayyuyaabvgdezhziyklmnoprstufhtschshshtayyuya", true},
 		{"bg", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", "ABVGDEZhZIYKLMNOPRSTUFHTsChShShtAYYuYaabvgdezhziyklmnoprstufhtschshshtayyuya", false},
 		{"cs", "ěščřžýáíéúůóňťĚŠČŘŽÝÁÍÉÚŮÓŇŤ", "escrzyaieuuontescrzyaieuuont", true},
@@ -103,6 +118,7 @@ func TestSlugMakeLang(t *testing.T) {
 		{"tr", "şüöğıçŞÜÖİĞÇ", "suogicSUOIGC", false},
 
 		// & fun.
+		{"ar", "This & that", "this-wa-that", true},
 		{"bg", "Това и онова", "tova-i-onova", true},
 		{"cs", "Toto & Tamto", "toto-a-tamto", true},
 		{"cs", "Toto & Tamto", "Toto-a-Tamto", false},
@@ -147,6 +163,7 @@ func TestSlugMakeLang(t *testing.T) {
 
 		// Test defaultSub, when adding new lang copy/paste this line,
 		// it contain special characters.
+		{"ar", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"bg", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"cs", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
 		{"de", "1\"2'3’4‒5–6—7―8", "1234-5-6-7-8", true},
@@ -184,6 +201,7 @@ func TestSlugMakeUserSubstituteLang(t *testing.T) {
 		want string
 	}{
 		{map[string]string{"'": " "}, "en", "That's great", "that-s-great"},
+		{map[string]string{"&": "or"}, "ar", "This & that", "this-or-that"},                   // by default "&" => "wa"
 		{map[string]string{"&": "or"}, "en", "This & that", "this-or-that"},                   // by default "&" => "and"
 		{map[string]string{"&": "or"}, "cs", "This & that", "this-or-that"},                   // by default "&" => "a"
 		{map[string]string{"&": "or"}, "ces", "This & that", "this-or-that"},                  // by default "&" => "a"
