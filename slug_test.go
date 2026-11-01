@@ -346,6 +346,28 @@ func TestSlugMakeSmartTruncate(t *testing.T) {
 	}
 }
 
+func TestSlugMakeNoSmartTruncateNoMaxLength(t *testing.T) {
+	defer func() {
+		MaxLength = 0
+		EnableSmartTruncate = true
+	}()
+	EnableSmartTruncate = false
+	MaxLength = 0
+	testCases := []struct {
+		in   string
+		want string
+	}{
+		{"Hello Gopher", "hello-gopher"},
+		{"ж Java.Java 6", "zh-java-java-6"},
+		{"", ""},
+	}
+	for index, tst := range testCases {
+		if got := Make(tst.in); got != tst.want {
+			t.Errorf("%d. EnableSmartTruncate = false; MaxLength = 0; Make(%#v) = %#v; want %#v", index, tst.in, got, tst.want)
+		}
+	}
+}
+
 func TestSlugMakeAppendTimestamp(t *testing.T) {
 	testCases := []struct {
 		in              string
