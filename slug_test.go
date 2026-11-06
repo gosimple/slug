@@ -690,3 +690,32 @@ func BenchmarkIsSlugLong(b *testing.B) {
 		IsSlug(longStr)
 	}
 }
+
+func TestMakeDisabledSmartTruncateDefaultMaxLength(t *testing.T) {
+	EnableSmartTruncate = false
+	defer func() { EnableSmartTruncate = true }()
+	got := Make("Hello World")
+	if got != "hello-world" {
+		t.Fatalf("got %q, want %q", got, "hello-world")
+	}
+}
+
+func TestIsSlugOptions(t *testing.T) {
+	t.Run("Lowercase false", func(t *testing.T) {
+		Lowercase = false
+		defer func() { Lowercase = true }()
+		s := Make("Dobroslaw Zybort")
+		if !IsSlug(s) {
+			t.Errorf("IsSlug(%q) should be true when Lowercase=false", s)
+		}
+	})
+
+	t.Run("DisableEndsTrim true", func(t *testing.T) {
+		DisableEndsTrim = true
+		defer func() { DisableEndsTrim = false }()
+		s := Make("-test-slug-")
+		if !IsSlug(s) {
+			t.Errorf("IsSlug(%q) should be true when DisableEndsTrim=true", s)
+		}
+	})
+}
