@@ -708,6 +708,9 @@ func TestIsSlugOptions(t *testing.T) {
 		if !IsSlug(s) {
 			t.Errorf("IsSlug(%q) should be true when Lowercase=false", s)
 		}
+		if IsSlug("Dobroslaw Zybort!") {
+			t.Errorf("IsSlug should be false for invalid characters when Lowercase=false")
+		}
 	})
 
 	t.Run("DisableEndsTrim true", func(t *testing.T) {
@@ -716,6 +719,9 @@ func TestIsSlugOptions(t *testing.T) {
 		s := Make("-test-slug-")
 		if !IsSlug(s) {
 			t.Errorf("IsSlug(%q) should be true when DisableEndsTrim=true", s)
+		}
+		if IsSlug("-test-slug-with-invalid-char!-") {
+			t.Errorf("IsSlug should be false for invalid characters when DisableEndsTrim=true")
 		}
 	})
 }
