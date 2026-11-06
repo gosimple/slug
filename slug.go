@@ -128,7 +128,7 @@ func MakeLang(s string, lang string) (slug string) {
 		slug = strings.ToLower(slug)
 	}
 
-	if !EnableSmartTruncate && len(slug) >= MaxLength {
+	if !EnableSmartTruncate && MaxLength > 0 && len(slug) > MaxLength {
 		slug = slug[:MaxLength]
 	}
 
@@ -212,13 +212,19 @@ func timestamp() string {
 func IsSlug(text string) bool {
 	if text == "" ||
 		(MaxLength > 0 && len(text) > MaxLength) ||
-		text[0] == '-' || text[0] == '_' ||
-		text[len(text)-1] == '-' || text[len(text)-1] == '_' {
+		(!DisableEndsTrim && (text[0] == '-' || text[0] == '_' ||
+			text[len(text)-1] == '-' || text[len(text)-1] == '_')) {
 		return false
 	}
 	for _, c := range text {
-		if (c < 'a' || c > 'z') && c != '-' && c != '_' && (c < '0' || c > '9') {
-			return false
+		if Lowercase {
+			if (c < 'a' || c > 'z') && c != '-' && c != '_' && (c < '0' || c > '9') {
+				return false
+			}
+		} else {
+			if (c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && c != '-' && c != '_' && (c < '0' || c > '9') {
+				return false
+			}
 		}
 	}
 	return true
